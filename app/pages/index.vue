@@ -15,5 +15,37 @@ onMounted(loadRuns)
       <StatCard label="Wins" :value="runs[0]?.win === true ? 'Yes' : 'No'" />
       <StatCard label="Ascension" :value="runs[0]?.ascension || 'N/A'" />
     </section>
+    <section class="map-row">
+      <MapCard label="Map" />
+    </section>
   </main>
 </template>
+<style scoped>
+
+.dashboard {
+  margin: 0;
+  padding: 0;
+  background-color: #1e1b2e;
+  color: white;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  min-height: 100vh;
+}
+.dashboard-header {
+  text-align: center;
+  padding: 2rem 1rem;
+}
+.stats-row {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.map-row {
+  display: flex;
+}
+</style>

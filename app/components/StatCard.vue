@@ -12,13 +12,23 @@ onMounted(() => {
 
 <template>
   <div ref="card" class="stat-card">
-    <div class="stat-value">{{ value }}</div>
     <div class="stat-label">{{ label }}</div>
+    <div class="stat-value">{{ value }}</div>
+
   </div>
 </template>
 
 <style scoped>
-.stat-card { padding: 10px  10px; border-radius: 20px; background: #1e1b2e; color: white; min-width: 120px; text-align: center; }
+.stat-card {
+  display: flex;
+  flex-direction: column;  
+  padding: 10px;
+  border-radius: 20px;
+  background: #1e1b2e;
+  color: white;
+  width: 240px;
+  text-align: center;
+}
 .stat-value { font-size: 1.75rem; font-weight: 700; }
 .stat-label { font-size: 0.85rem; opacity: 0.7; margin-top: 0.25rem; }
 </style>
