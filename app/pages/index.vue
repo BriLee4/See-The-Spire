@@ -43,9 +43,13 @@ const resetFileUpload = () => {
       description=".run files are located in your Slay the Spire save folder"
       class="w-120 h-70"
       accept= ".run"
+      :file-delete="false"
+      :file-image="false"
       />
+      <div v-if="files?.size" class="file-loader-overlay">
       <p v-if="errorMessage" style="color: red;">{{ errorMessage }}</p>
-      <UButton  v-if="files?.size" type="reset" @click="resetFileUpload">Reset</UButton>
+      <UButton type="reset" @click="resetFileUpload">Reset</UButton>
+    </div>
     </section>
   </main>
 </template>
@@ -58,21 +62,31 @@ const resetFileUpload = () => {
     background-repeat: no-repeat;
     min-height: 100vh;
 }
-.file-loader { margin-inline: auto;  
-  padding: 20px  20px; 
+.file-loader { 
+  position: relative;
+  margin-inline: auto;  
+  padding: 10px  10px; 
   justify-content: center;
   border-radius: 20px; 
   background: #222C11; 
   color: white; 
-
-}
-.file-loader{
-  display: grid;
+    display: grid;
   place-items: center;     /* Centers horizontally and vertically instantly */
   width: 550px; 
   height: 350px; 
 }
 
+.file-loader-overlay {
+  position: absolute;
+  bottom: 75px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  z-index: 10;
+  
+}
 .loader-header {
   text-align: center;
   padding: 2rem 1rem;
