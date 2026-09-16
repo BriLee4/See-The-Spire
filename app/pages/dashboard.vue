@@ -19,6 +19,11 @@ onMounted(async () => {
     </header>
     <section class="stats-row">
         <StatCard label="Character" :value="runs[0]?.character || 'N/A'" />
+        <StatCard label="Ascension" :value="runs[0]?.ascension || 'N/A'" />
+        <StatCard label="Win" :value ="runs[0]?.win? 'Yes' : 'No'" />
+        <StatCard label="Floors Reached" :value="runs[0]?.floorReached || 'N/A'" />
+        <StatCard label="Damage Taken" :value="runs[0]?.damageTaken || 'N/A'" />
+        
     </section>
     <section class="map-row">
       <MapCard label="Map" />

@@ -3,13 +3,17 @@ import type { Run } from '~/types/run'
 
 interface RawRun {
   ascension: number
-  map_point_history: unknown[][]
+  map_point_history: FloorHistoryEntry[][]
   win: boolean
+  total_damage_taken: number
   players: {
     character: string
     deck: unknown[]
     relics: unknown[]
   }[]
+}
+interface FloorHistoryEntry {
+  player_stats?: { damage_taken?: number }[]
 }
 
 function parseRun(name: string, raw: RawRun): Run {
@@ -23,7 +27,8 @@ function parseRun(name: string, raw: RawRun): Run {
     floorReached: raw.map_point_history.reduce((sum, act) => sum + act.length, 0),
     deckSize: player.deck.length,
     relicCount: player.relics.length,
-    win: raw.win
+    win: raw.win,
+    damageTaken: calculateDamageTaken(raw)
   }
 }
 
@@ -38,4 +43,11 @@ export function useRuns() {
   }
 
   return { runs, loadRuns }
+}
+
+function calculateDamageTaken(raw: RawRun): number {
+  return raw.map_point_history
+    .flatMap(act => act)                         // flatten acts into individual floor entries
+    .flatMap(floor => floor.player_stats || [])  // flatten into per-player stat objects
+    .reduce((sum, stats) => sum + (stats.damage_taken || 0), 0)
 }
