@@ -1,8 +1,30 @@
 <script setup lang="ts">
-import gsap from 'gsap'
-const value = ref(null)
-const { runs, loadRuns } = useRuns()
-onMounted(loadRuns)
+const files = ref<File | null>(null)
+const runFile = useRunFile()
+const errorMessage = ref('')
+watch(files, async(file) => {
+  if(!file) return
+  if(!file.name.endsWith('.run')){
+    errorMessage.value = 'Invalid file type. Please upload a .run file.'
+    return
+  } 
+
+  const text = await file.text()
+  const parsed = JSON.parse(text)
+
+  runFile.value = { name: file.name, data: parsed}
+
+  await navigateTo('/dashboard')
+
+})
+const resetFileUpload = () => {
+  files.value = null
+  runFile.value = null
+  errorMessage.value = ''
+}
+
+
+
 </script>
 
 <template>
@@ -10,22 +32,26 @@ onMounted(loadRuns)
     <header class="loader-header">
       <h1>SeeTheSpire</h1>
       <p>Upload your Slay the Spire run file to view stats</p>
+      <NuxtLink to="/dashboard">About Us</NuxtLink>
       </header>
 
     <section class="file-loader">
-      <UFileUpload color="neutral"
+      <UFileUpload 
+      v-model="files"
+      color="neutral"
       highlight
       label="Drop your .run file here"
       description=".run files are located in your Slay the Spire save folder"
       class="w-120 h-70"
       accept= ".run"
       />
+      <p v-if="errorMessage" style="color: red;">{{ errorMessage }}</p>
+      <UButton  v-if="files?.size" type="reset" @click="resetFileUpload">Reset</UButton>
     </section>
   </main>
 </template>
 <style scoped>
 .main-page{
-    font-family: 'Kreon', serif;
     font-size: 25px;
     background-color: #1e1b2e;
     background-size: cover;

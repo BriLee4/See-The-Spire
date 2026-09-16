@@ -5,6 +5,7 @@
 </template>
 <style lang="css">
 html, body, #app {
+  font-family: 'Kreon', serif;
   margin: 0;
   padding: 0;
   height: 100%;
