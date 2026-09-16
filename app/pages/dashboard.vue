@@ -1,10 +1,14 @@
 <script setup lang="ts">
 import gsap from 'gsap'
 const runFile = useRunFile()
-
-if(!runFile.value){
-  navigateTo('/')
-}
+const { runs, loadRuns } = useRuns()
+onMounted(async () => {
+  if (!runFile.value) {
+    await navigateTo('/')
+    return
+  }
+  await loadRuns()
+})
 </script>
 
 <template>
@@ -14,7 +18,7 @@ if(!runFile.value){
       <p>View your Slay the Spire runs and stats</p>
     </header>
     <section class="stats-row">
-        <StatCard label="Character" :value="runFile?.data[0]?.character || 'N/A'" />
+        <StatCard label="Character" :value="runs[0]?.character || 'N/A'" />
     </section>
     <section class="map-row">
       <MapCard label="Map" />

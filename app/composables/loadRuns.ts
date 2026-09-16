@@ -1,3 +1,4 @@
+import { useRunFile } from './useRunFile'
 import type { Run } from '~/types/run'
 
 interface RawRun {
@@ -11,12 +12,12 @@ interface RawRun {
   }[]
 }
 
-function parseRun(raw: RawRun): Run {
+function parseRun(name: string, raw: RawRun): Run {
   const player = raw.players[0]
   if (!player) throw new Error('Run has no players')
 
   return {
-    id: '1788790424',
+    id: name.replace(/\.run$/, ''),
     character: player.character.replace(/^CHARACTER\./, ''),
     ascension: raw.ascension,
     floorReached: raw.map_point_history.reduce((sum, act) => sum + act.length, 0),
@@ -30,10 +31,10 @@ export function useRuns() {
   const runs = ref<Run[]>([])
 
   async function loadRuns() {
+    const runFile = useRunFile()
     // The .run extension is recognized as application/x-makeself by static
     // file servers, so $fetch won't auto-parse it as JSON — parse manually.
-    const text = await $fetch<string>('/data/1788790424.run', { responseType: 'text' })
-    runs.value = [parseRun(JSON.parse(text))]
+    runs.value = [parseRun(runFile.value.name, runFile.value.data)]
   }
 
   return { runs, loadRuns }
