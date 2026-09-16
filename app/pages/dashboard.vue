@@ -1,7 +1,10 @@
 <script setup lang="ts">
 import gsap from 'gsap'
-const { runs, loadRuns } = useRuns()
-onMounted(loadRuns)
+const runFile = useRunFile()
+
+if(!runFile.value){
+  navigateTo('/')
+}
 </script>
 
 <template>
@@ -11,9 +14,7 @@ onMounted(loadRuns)
       <p>View your Slay the Spire runs and stats</p>
     </header>
     <section class="stats-row">
-      <StatCard label="Character" :value="runs[0]?.character || 'N/A'" />
-      <StatCard label="Wins" :value="runs[0]?.win === true ? 'Yes' : 'No'" />
-      <StatCard label="Ascension" :value="runs[0]?.ascension || 'N/A'" />
+        <StatCard label="Character" :value="runFile?.data[0]?.character || 'N/A'" />
     </section>
     <section class="map-row">
       <MapCard label="Map" />
