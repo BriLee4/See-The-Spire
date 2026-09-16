@@ -32,7 +32,6 @@ const resetFileUpload = () => {
     <header class="loader-header">
       <h1>SeeTheSpire</h1>
       <p>Upload your Slay the Spire run file to view stats</p>
-      <NuxtLink to="/dashboard">About Us</NuxtLink>
       </header>
 
     <section class="file-loader">
