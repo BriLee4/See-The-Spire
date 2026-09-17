@@ -6,4 +6,5 @@ export interface Run {
   deckSize: number         // run_data.players[0].deck.length
   relicCount: number        // run_data.players[0].relics.length
   win: boolean              //run_data.win
+  damageTaken: number       // run_data.total_damage_taken
 }
