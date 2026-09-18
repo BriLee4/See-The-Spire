@@ -8,6 +8,7 @@ onMounted(async () => {
     return
   }
   await loadRuns()
+  await loadFloor()
 })
 </script>
 
@@ -26,7 +27,7 @@ onMounted(async () => {
         
     </section>
     <section class="map-row">
-      <MapCard label="Map" />
+      
     </section>
   </main>
 </template>
