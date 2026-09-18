@@ -28,8 +28,8 @@ export interface FloorSummary {
   cardsGained?: string[]
   cardsRemoved?: string[]
   upgradedCards?: string[]
-  relicChoice?: { choice: string; wasPicked: boolean }
-  potionChoices?: { choice: string; wasPicked: boolean }[]
+  relicChoice?: { choice: string; was_picked: boolean }
+  potionChoices?: { choice: string; was_picked: boolean }[]
   eventChoice?: { key: string; table: string }             // event_choices[0]?.title
   ancientChoice?: { textKey: string; wasChosen: boolean }[]
   restSiteChoices?: string[]
