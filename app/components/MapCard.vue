@@ -81,15 +81,15 @@ function floorImage(floor: FloorSummary): string {
 <template>
   <div ref="card" class="map-card">
     <div v-for="act in floorsByAct" :key="act.actIndex" class="act-column">
-      <h3 class="act-label">Act {{ act.actIndex + 1 }}: {{ act.actName }}</h3>
         <img
-          v-for="floor in act.floors"
+          v-for="floor in act.floors.toReversed()"
           :key="floor.floorNumber"
           :src="floorImage(floor)"
           :alt="titleCase(floor.roomType)"
           :title="floorTitle(floor)"
           class="floor-node-img"
         />
+         <h3 class="act-label">Act {{ act.actIndex + 1 }}: {{ act.actName }}</h3>
     </div>
   </div>
 </template>
@@ -102,28 +102,35 @@ function floorImage(floor: FloorSummary): string {
   border-radius: 20px;
   background: #a38a6b;
   color: white;
-  width: 600px;
-  min-height: 1000px;
+  min-width: fit-content;
+  min-height: fit-content;
   display: flex;
   flex-direction: row;
   gap: 60px;
-  align-items: flex-start;
   justify-content: center;
+  align-items: flex-end; 
 }
+
 .act-column {
   display: flex;
-  flex-direction: column;
-  align-items: center;
+  flex-direction: column; 
+  align-items: center;    
+  flex: 1 1 0px; 
+  text-align: center; 
+  justify-content: flex-end; 
   gap: 6px;
+  height: 100%; 
 }
+
 .act-label {
   font-size: 0.9rem;
   opacity: 0.8;
-  margin-bottom: 4px;
+  margin-top: 4px; 
 }
+
 .floor-node {
   display: flex;
-  flex-wrap: wrap;
+  justify-content: flex-end;
   padding: 6px 10px;
   border-radius: 8px;
   background: #2a2640;
@@ -131,10 +138,13 @@ function floorImage(floor: FloorSummary): string {
   cursor: default;
   margin-bottom: 6px;
 }
+
 .floor-node-img {
   width: 48px;
   height: 48px;
   object-fit: contain;
   cursor: default;
+  background-color: #997950;
+  border-radius: 50%;
 }
-</style>  
+</style>

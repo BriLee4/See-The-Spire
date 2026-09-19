@@ -31,7 +31,7 @@ const resetFileUpload = () => {
   <main class="main-page">
     <header class="loader-header">
       <h1>SeeTheSpire</h1>
-      <p>Upload your Slay the Spire run file to view stats</p>
+      <p>Upload your Slay the Spire run and see the stats</p>
       </header>
 
     <section class="file-loader">
