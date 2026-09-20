@@ -35,21 +35,24 @@ function goBack() {
           Back
         </UButton>
       </div>
-      
+      <div class="stat-header">
       <StatCard label="Character" :value="runs[0]?.character || 'N/A'" />
+    </div>
+      <section class="stat-card">
       <StatCard label="Ascension" :value="runs[0]?.ascension || 'N/A'" />
       <StatCard label="Win" :value="runs[0]?.win ? 'Yes' : 'No'" />
       <StatCard label="Floors Reached" :value="runs[0]?.floorReached || 'N/A'" />
       <StatCard label="Damage Taken" :value="runs[0]?.damageTaken || 'N/A'" />
+      </section>
     </section>
 
     <section class="main-content-column">
       <header class="dashboard-header">
-        <h1>SeeTheSpire</h1>
+        <h1>See<span class="highlight">The</span>Spire</h1>
       </header>
       
       <div class="map-card">
-        <MapCard label="Map" :floors="floors" />
+       <MapCard label="Map" :floors="floors" /> 
       </div>
     </section>
 
@@ -69,7 +72,7 @@ function goBack() {
   background-repeat: no-repeat;
   min-height: 100vh;
   display: grid;
-  grid-template-columns: 1fr 2fr 1fr;
+  grid-template-columns: 1fr 1fr 1fr;
   gap: 2rem;
 }
 
@@ -77,6 +80,10 @@ function goBack() {
   display: flex;
   flex-direction: column;
   gap: 16px;
+}
+
+.highlight{
+  color: #fec000;  -webkit-text-stroke: .5px black;
 }
 
 .back-button-container {

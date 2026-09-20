@@ -123,9 +123,11 @@ function floorImage(floor: FloorSummary): string {
 }
 
 .act-label {
-  font-size: 0.9rem;
+  font-size: 1.25em;
   opacity: 0.8;
   margin-top: 4px; 
+  color: #4e3e28;
+  font-weight: 700;
 }
 
 .floor-node {
@@ -144,7 +146,7 @@ function floorImage(floor: FloorSummary): string {
   height: 48px;
   object-fit: contain;
   cursor: default;
-  background-color: #997950;
+  background-color: #c3a58b;
   border-radius: 50%;
 }
 </style>

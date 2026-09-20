@@ -30,7 +30,7 @@ const resetFileUpload = () => {
 <template>
   <main class="main-page">
     <header class="loader-header">
-      <h1>SeeTheSpire</h1>
+        <h1>See<span class="highlight">The</span>Spire</h1>
       <p>Upload your Slay the Spire run and see the stats</p>
       </header>
 
@@ -92,6 +92,9 @@ const resetFileUpload = () => {
   padding: 2rem 1rem;
 }
 
+.highlight{
+  color: #fec000;  -webkit-text-stroke: .5px black;
+}
 
 .map-row {
   display: flex;

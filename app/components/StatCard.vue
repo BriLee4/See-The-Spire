@@ -30,5 +30,5 @@ onMounted(() => {
   text-align: center;
 }
 .stat-value { font-size: 1.75rem; font-weight: 700; }
-.stat-label { font-size: 0.85rem; opacity: 0.7; margin-top: 0.25rem; }
+.stat-label { font-size: 1.75rem; font-weight: 700; margin-top: 0.25rem; color: #fec000;  -webkit-text-stroke: .5px black;}
 </style>
