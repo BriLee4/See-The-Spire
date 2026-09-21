@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import gsap from 'gsap'
 import type { FloorSummary } from '~/types/floorSummary'
+import { titleCase } from '~/utils/text'
 
 const props = defineProps<{ floors: FloorSummary[] }>()
 
@@ -22,13 +23,7 @@ const floorsByAct = computed(() => {
   return [...grouped.values()].sort((a, b) => a.actIndex - b.actIndex)
 })
 
-function titleCase(s: string): string {
-  return s
-    .toLowerCase()
-    .split('_')
-    .map(word => word[0]?.toUpperCase() + word.slice(1))
-    .join(' ')
-}
+
 
 function formatMonsterName(id: string): string {
   return titleCase(id.replace(/^MONSTER\./, ''))
