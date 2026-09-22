@@ -29,19 +29,22 @@ const cardCounts = computed(() => {
     <section class="icon-section">
       <h3 class="section-label">Relics</h3>
       <div class="icon-grid">
-        <img
-          v-for="relic in relics"
-          :key="relic.id"
-          :src="relicImageUrl(relic.id)"
-          :alt="relicDisplayName(relic.id)"
-          :title="relicDisplayName(relic.id)"
-          class="icon-img-relic"
-        />
+        <UTooltip 
+          v-for="relic in relics" 
+          :key="relic.id" 
+          :text="relicDisplayName(relic.id)"
+        >
+          <img 
+            :src="relicImageUrl(relic.id)" 
+            :alt="relicDisplayName(relic.id)" 
+            class="icon-img-relic" 
+          />
+        </UTooltip>
       </div>
     </section>
 
     <section class="icon-section">
-      <h3 class="section-label">Cards Taken</h3>
+      <h3 class="section-label">Final Deck</h3>
       <div class="icon-grid">
         <div v-for="entry in cardCounts" :key="entry.card.id + (entry.card.current_upgrade_level ? '+' : '')" class="icon-wrap">
           <img
