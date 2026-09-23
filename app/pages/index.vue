@@ -71,7 +71,7 @@ const resetFileUpload = () => {
   margin-inline: auto;   
   justify-content: center;
   border-radius: 20px; 
-  background-image:url("./imgs/submenu_panel_short.png") ; 
+  background-image:url("/imgs/submenu_panel_short.png") ; 
   background-repeat: no-repeat;
   background-repeat: no-repeat; 
   background-position: center;

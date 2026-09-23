@@ -95,7 +95,7 @@ function floorImage(floor: FloorSummary): string {
   margin-top: 1rem;
   padding: 20px;
   border-radius: 20px;
-  background-image:url("./imgs/submenu_panel.png") ; 
+  background-image:url("/imgs/submenu_panel.png") ; 
   background-repeat: no-repeat;
   background-repeat: no-repeat; 
   background-position: center;
