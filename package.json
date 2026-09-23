@@ -13,7 +13,6 @@
   },
   "dependencies": {
     "@nuxt/ui": "^4.11.1",
-    "@nuxthub/core": "^0.10.8",
     "gsap": "^3.15.0",
     "nuxt": "^4.5.2",
     "tailwindcss": "^4.3.3",
@@ -21,6 +20,8 @@
     "vue-router": "^5.3.1"
   },
   "devDependencies": {
+    "@cloudflare/workers-types": "^5.20260923.1",
+    "@types/node": "^26.6.2",
     "nitro-cloudflare-dev": "^0.2.2",
     "wrangler": "^4.136.3"
   }
