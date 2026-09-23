@@ -97,8 +97,9 @@ function floorImage(floor: FloorSummary): string {
   border-radius: 20px;
   background: #a38a6b;
   color: white;
-  min-width: fit-content;
-  min-height: fit-content;
+  min-width: 300px;
+  width: fit-content;
+  height: fit-content;
   display: flex;
   flex-direction: row;
   gap: 60px;

@@ -41,14 +41,13 @@ const resetFileUpload = () => {
       highlight
       label="Drop your .run file here"
       description=".run files are located in your Slay the Spire save folder"
-      class="w-90 h-120"
+      class="w-90 h-120 -translate-x-1"
       accept= ".run"
       :file-delete="false"
       :file-image="false"
       :icon="false"
         :ui="{
-    base: 'bg-transparent hover:bg-amber-800/25',
-    container: 'bg-transparent hover:bg-amber-800/25'
+    base: 'bg-transparent hover:bg-amber-800/25'
   }"
       />
       <div v-if="files?.size" class="file-loader-overlay">
@@ -69,8 +68,7 @@ const resetFileUpload = () => {
 }
 .file-loader { 
   position: relative;
-  margin-inline: auto;  
-  padding: 10px  10px; 
+  margin-inline: auto;   
   justify-content: center;
   border-radius: 20px; 
   background-image:url("./imgs/submenu_panel_short.png") ; 
@@ -94,17 +92,7 @@ const resetFileUpload = () => {
   z-index: 10;
   
 }
-/* Force the main component wrapper to have a transparent background */
-.file-loader :deep(.w-90) {
-  background-color: transparent !important;
-  border-color: currentColor; /* Keeps the border visible using the text color */
-}
 
-/* If the library uses an inner button or dropzone div for the background */
-.file-loader :deep(button),
-.file-loader :deep(.relative) {
-  background-color: transparent !important;
-}
 .loader-header {
   text-align: center;
   padding: 2rem 1rem;
