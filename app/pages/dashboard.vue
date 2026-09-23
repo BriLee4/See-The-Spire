@@ -7,6 +7,8 @@ const runFile = useRunFile()
 const { runs, loadRuns } = useRuns()
 const { floors, loadFloors } = useFloors()
 
+const player = computed(() => (runFile.value?.data as Run | undefined)?.players[0])
+
 onMounted(async () => {
   if (!runFile.value) {
     await navigateTo('/')
@@ -21,7 +23,7 @@ function goBack() {
 
 </script>
 
-<<template>
+<template>
   <main class="dashboard">
     <section class="stats-column">
       <div class="back-button-container">
@@ -35,17 +37,19 @@ function goBack() {
           Back
         </UButton>
       </div>
-      <div class="stat-header">
-      <StatCard label="Character" :value="runs[0]?.character || 'N/A'" />
-    </div>
-      <section class="stat-card">
-      <StatCard label="Ascension" :value="runs[0]?.ascension || 'N/A'" />
-      <StatCard label="Win" :value="runs[0]?.win ? 'Yes' : 'No'" />
-      <StatCard label="Floors Reached" :value="runs[0]?.floorReached || 'N/A'" />
-      <StatCard label="Damage Taken" :value="runs[0]?.damageTaken || 'N/A'" />
-      </section>
-    </section>
-
+     <StatCard
+        :stats="[{ label: 'Character', value: runs[0]?.character || 'N/A' }]"
+      />
+     <StatCard
+        title="Run Stats"
+        :stats="[
+          { label: 'Ascension', value: runs[0]?.ascension ?? 'N/A' },
+          { label: 'Win', value: runs[0]?.win ? 'Yes' : 'No' },
+          { label: 'Floors Reached', value: runs[0]?.floorReached ?? 'N/A' },
+          { label: 'Damage Taken', value: runs[0]?.damageTaken ?? 'N/A' }
+        ]"
+      />
+     </section>
     <section class="main-content-column">
       <header class="dashboard-header">
         <h1>See<span class="highlight">The</span>Spire</h1>
@@ -57,6 +61,7 @@ function goBack() {
     </section>
 
     <section class="right-column">
+      <RelicCard :relics="player?.relics ?? []" :deck="player?.deck ?? []" />
     </section>
   </main>
 </template>
