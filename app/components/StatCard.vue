@@ -30,22 +30,21 @@ onMounted(() => {
   flex-direction: column;
   padding: 10px;
   border-radius: 20px;
-  background: #1e1b2e;
   color: white;
-  width: 240px;
+  width:400px;
   text-align: center;
   gap: 0.5rem;
   margin-left: auto;
   margin-right: auto;
 }
 .stat-card-title {
-  font-size: 1.1rem;
+  font-size: 2.5rem;
   font-weight: 700;
   color: #fec000;
   -webkit-text-stroke: .5px black;
-  margin: 0 0 0.25rem 0;
+  margin: 0 0 2rem 0;
 }
 .stat-row { display: flex; flex-direction: column; }
-.stat-value { font-size: 1.75rem; font-weight: 700; }
-.stat-label { font-size: 1.1rem; font-weight: 700; margin-top: 0.25rem; color: #fec000; -webkit-text-stroke: .5px black; }
+.stat-value { font-size: 2rem; font-weight: 700; }
+.stat-label { font-size: 2rem; font-weight: 700; margin-top: 1rem; color: #fec000; -webkit-text-stroke: .5px black; }
 </style>

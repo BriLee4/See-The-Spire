@@ -64,14 +64,15 @@ const cardCounts = computed(() => {
 .relics-card {
   padding: 20px;
   border-radius: 20px;
-  background: #1e1b2e;
   color: white;
   display: flex;
   flex-direction: column;
   gap: 1.25rem;
+  margin-top: 100px;
+  padding-left: 50px;
 }
 .section-label {
-  font-size: 1.1rem;
+  font-size: 2em;
   font-weight: 700;
   color: #fec000;
   -webkit-text-stroke: .5px black;

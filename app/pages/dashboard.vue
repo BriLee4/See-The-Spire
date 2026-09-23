@@ -25,7 +25,7 @@ function goBack() {
 
 <template>
   <main class="dashboard">
-    <section class="stats-column">
+  <div class="left-sidebar-wrapper">
       <div class="back-button-container">
         <UButton
           class="back-button"
@@ -36,13 +36,13 @@ function goBack() {
         >
           Back
         </UButton>
+
       </div>
-     <StatCard
-        :stats="[{ label: 'Character', value: runs[0]?.character || 'N/A' }]"
-      />
+       <section class="stats-column">
      <StatCard
         title="Run Stats"
         :stats="[
+          { label: 'Character', value: runs[0]?.character || 'N/A' },
           { label: 'Ascension', value: runs[0]?.ascension ?? 'N/A' },
           { label: 'Win', value: runs[0]?.win ? 'Yes' : 'No' },
           { label: 'Floors Reached', value: runs[0]?.floorReached ?? 'N/A' },
@@ -50,6 +50,7 @@ function goBack() {
         ]"
       />
      </section>
+     </div>
     <section class="main-content-column">
       <header class="dashboard-header">
         <h1>See<span class="highlight">The</span>Spire</h1>
@@ -70,23 +71,36 @@ function goBack() {
 .dashboard {
   margin: 0;
   padding: 2rem;
-  background-color: #1e1b2e;
-  color: white;
-  background-size: cover;
-  background-position: center;
+  background-image:url("./imgs/overgrowth.webp") ; 
   background-repeat: no-repeat;
+  background-repeat: no-repeat; 
+  background-position: center;
+  background-size: cover;
+  background-attachment: fixed;
+  color: white;
   min-height: 100vh;
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-columns: 1fr auto 1fr;
   gap: 2rem;
+}
+
+.left-sidebar-wrapper{
+  display: flex;
+  flex-direction: column;
+  gap: 16px; 
 }
 
 .stats-column {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  padding-top: 50px;
+  gap: 12px;
 }
 
+.back-button-container {
+  display: flex;
+  justify-content: flex-start;
+}
 .highlight{
   color: #fec000;  -webkit-text-stroke: .5px black;
 }
