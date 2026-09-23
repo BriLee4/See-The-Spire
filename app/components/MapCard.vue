@@ -95,14 +95,18 @@ function floorImage(floor: FloorSummary): string {
   margin-top: 1rem;
   padding: 20px;
   border-radius: 20px;
-  background: #a38a6b;
+  background-image:url("./imgs/submenu_panel.png") ; 
+  background-repeat: no-repeat;
+  background-repeat: no-repeat; 
+  background-position: center;
+  background-size: 100% 100%;
   color: white;
-  min-width: 300px;
-  width: fit-content;
-  height: fit-content;
+  min-height: 800px;
+  min-width: 400px;
+  width: max-content;
+  height: max-content;
   display: flex;
   flex-direction: row;
-  gap: 60px;
   justify-content: center;
   align-items: flex-end; 
 }
@@ -116,13 +120,15 @@ function floorImage(floor: FloorSummary): string {
   justify-content: flex-end; 
   gap: 6px;
   height: 100%; 
+  padding: 20px;
+  padding-bottom: 40px;
 }
 
 .act-label {
   font-size: 1.25em;
   opacity: 0.8;
   margin-top: 4px; 
-  color: #4e3e28;
+  color: #271c0c;
   font-weight: 700;
 }
 
