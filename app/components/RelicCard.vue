@@ -68,7 +68,7 @@ const cardCounts = computed(() => {
   display: flex;
   flex-direction: column;
   gap: 1.25rem;
-  margin-top: 100px;
+  margin-top: 75px;
   padding-left: 50px;
 }
 .section-label {
