@@ -30,8 +30,8 @@ const resetFileUpload = () => {
 <template>
   <main class="main-page">
     <header class="loader-header">
-      <h1>SeeTheSpire</h1>
-      <p>Upload your Slay the Spire run file to view stats</p>
+        <h1>See<span class="highlight">The</span>Spire</h1>
+      <p>Upload your Slay the Spire run and see your recent run</p>
       </header>
 
     <section class="file-loader">
@@ -41,10 +41,14 @@ const resetFileUpload = () => {
       highlight
       label="Drop your .run file here"
       description=".run files are located in your Slay the Spire save folder"
-      class="w-120 h-70"
+      class="w-90 h-120 -translate-x-1"
       accept= ".run"
       :file-delete="false"
       :file-image="false"
+      :icon="false"
+        :ui="{
+    base: 'bg-transparent hover:bg-amber-800/25'
+  }"
       />
       <div v-if="files?.size" class="file-loader-overlay">
       <p v-if="errorMessage" style="color: red;">{{ errorMessage }}</p>
@@ -64,21 +68,22 @@ const resetFileUpload = () => {
 }
 .file-loader { 
   position: relative;
-  margin-inline: auto;  
-  padding: 10px  10px; 
+  margin-inline: auto;   
   justify-content: center;
   border-radius: 20px; 
-  background: #222C11; 
+  background-image:url("./imgs/submenu_panel_short.png") ; 
+  background-repeat: no-repeat;
+  background-repeat: no-repeat; 
+  background-position: center;
+  background-size: contain; 
   color: white; 
-    display: grid;
+  display: grid;
   place-items: center;     /* Centers horizontally and vertically instantly */
-  width: 550px; 
-  height: 350px; 
+  width: 800px; 
+  height: 600px; 
 }
 
 .file-loader-overlay {
-  position: absolute;
-  bottom: 75px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -87,11 +92,15 @@ const resetFileUpload = () => {
   z-index: 10;
   
 }
+
 .loader-header {
   text-align: center;
   padding: 2rem 1rem;
 }
 
+.highlight{
+  color: #fec000;  -webkit-text-stroke: .5px black;
+}
 
 .map-row {
   display: flex;

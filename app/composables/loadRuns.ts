@@ -1,22 +1,11 @@
 import { useRunFile } from './useRunFile'
 import type { Run } from '~/types/run'
+import type { RunSummary } from '~/types/runSummary'
+import type { FloorSummary } from '~/types/floorSummary'
 
-interface RawRun {
-  ascension: number
-  map_point_history: FloorHistoryEntry[][]
-  win: boolean
-  total_damage_taken: number
-  players: {
-    character: string
-    deck: unknown[]
-    relics: unknown[]
-  }[]
-}
-interface FloorHistoryEntry {
-  player_stats?: { damage_taken?: number }[]
-}
 
-function parseRun(name: string, raw: RawRun): Run {
+
+function parseRun(name: string, raw: Run): RunSummary {
   const player = raw.players[0]
   if (!player) throw new Error('Run has no players')
 
@@ -32,20 +21,22 @@ function parseRun(name: string, raw: RawRun): Run {
   }
 }
 
+
 export function useRuns() {
-  const runs = ref<Run[]>([])
+  const runs = ref<RunSummary[]>([])
 
   async function loadRuns() {
     const runFile = useRunFile()
-    // The .run extension is recognized as application/x-makeself by static
-    // file servers, so $fetch won't auto-parse it as JSON — parse manually.
-    runs.value = [parseRun(runFile.value.name, runFile.value.data)]
+    if(runFile.value === null){
+      throw new Error('No runfile Found')
+    }
+    runs.value = [parseRun(runFile.value.name, runFile.value.data as Run)]
   }
 
   return { runs, loadRuns }
 }
 
-function calculateDamageTaken(raw: RawRun): number {
+function calculateDamageTaken(raw: Run): number {
   return raw.map_point_history
     .flatMap(act => act)                         // flatten acts into individual floor entries
     .flatMap(floor => floor.player_stats || [])  // flatten into per-player stat objects
