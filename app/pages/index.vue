@@ -51,15 +51,18 @@ const exampleFileUpload = async () => {
       description=".run files are located in your Slay the Spire save folder"
       class="w-90 h-120 -translate-x-1"
       accept= ".run"
+      size=''
       :file-delete="false"
       :file-image="false"
       :icon="false"
         :ui="{
-    base: 'bg-transparent hover:bg-amber-800/25'
+    base: 'bg-transparent hover:bg-amber-800/25',
+    description:'text-white',
+    label:'text-white'
   }"
       />
           <section class = 'file-button'>
-       <UButton type="submit" @click="exampleFileUpload">Example Run</UButton>
+       <UButton type="submit" size="xl" color ="secondary" @click="exampleFileUpload">Example Run</UButton>
           </section>
       <div v-if="files?.size" class="file-loader-overlay">
       <p v-if="errorMessage" style="color: red;">{{ errorMessage }}</p>

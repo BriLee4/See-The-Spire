@@ -21,12 +21,10 @@ function goBack() {
   router.back() //
 }
 const act1Name = computed(() => {
-  // Finds the first floor that has an act name, or safely checks your floor structure
   const firstFloor = floors.value?.[0]
   return firstFloor?.actName?.toLowerCase() || 'overgrowth' 
 })
 
-// 2. Map the act name to your CSS class
 const backgroundClass = computed(() => {
   if (act1Name.value.includes('underdocks')) {
     return 'bg-underdocks'
