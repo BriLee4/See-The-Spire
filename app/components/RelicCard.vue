@@ -2,7 +2,6 @@
 import gsap from 'gsap'
 import type { Relic, Deck } from '~/types/run'
 import { relicImageUrl, relicDisplayName, cardImageUrl, cardDisplayName } from '~/utils/assets'
-
 const props = defineProps<{ relics: Relic[]; deck: Deck[] }>()
 
 const card = ref<HTMLElement | null>(null)
@@ -22,6 +21,21 @@ const cardCounts = computed(() => {
   }
   return [...seen.values()]
 })
+const { data: relicInfo } = useFetch('/api/relics', {
+  query: { ids: computed(() => props.relics.map(r => r.id).join(',')) },
+})
+
+const info = (id: string) => relicInfo.value?.[id.replace(/^RELIC\./, '')]
+
+const stripTags = (s: string) => s.replace(/\[\/?[a-z]+\]/gi, '')
+
+const relicName = (id: string) => info(id)?.name
+const relicImage = (id: string) => info(id)?.image_url ?? 'N/A'
+const relicTooltip = (id: string) => {
+  const desc = info(id)?.description
+  return desc ? `${relicName(id)}: ${stripTags(desc)}` : relicName(id)
+}
+
 </script>
 
 <template>
@@ -29,19 +43,19 @@ const cardCounts = computed(() => {
     <section class="icon-section">
       <h3 class="section-label">Relics</h3>
       <div class="icon-grid">
-        <UTooltip 
-          v-for="relic in relics" 
-          :key="relic.id" 
-          :text="relicDisplayName(relic.id)"
-        >
-          <img 
-            :src="relicImageUrl(relic.id)" 
-            :alt="relicDisplayName(relic.id)" 
-            class="icon-img-relic" 
-          />
-        </UTooltip>
+        <UPopover v-for="relic in relics" :key="relic.id" mode="hover">
+          <img :src="relicImage(relic.id)" :alt="relicName(relic.id)" class="icon-img-relic" />
+          <template #content>
+            <UCard class="relic-popover-card">
+              <div class="relic-description">
+                {{ relicTooltip(relic.id) }}
+              </div>
+            </UCard>
+          </template>
+        </UPopover>
       </div>
     </section>
+  </div>
 
     <section class="icon-section">
       <h3 class="section-label">Final Deck</h3>
@@ -50,14 +64,12 @@ const cardCounts = computed(() => {
           <img
             :src="cardImageUrl(entry.card.id, !!entry.card.current_upgrade_level)"
             :alt="cardDisplayName(entry.card.id)"
-            :title="cardDisplayName(entry.card.id)"
             class="icon-img-card"
           />
           <span v-if="entry.count > 1" class="icon-count">{{ entry.count }}</span>
         </div>
       </div>
     </section>
-  </div>
 </template>
 
 <style scoped>
@@ -77,6 +89,13 @@ const cardCounts = computed(() => {
   color: #fec000;
   -webkit-text-stroke: .5px black;
   margin: 0 0 0.5rem 0;
+}
+.relic-popover-card {
+  max-width: 200;
+}
+.relic-description {
+  white-space: normal;
+  word-break: break-word;
 }
 .icon-grid {
   display: flex;
