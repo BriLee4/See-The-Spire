@@ -22,7 +22,15 @@ const resetFileUpload = () => {
   runFile.value = null
   errorMessage.value = ''
 }
+const exampleFileUpload = async () => {
+  const response = await fetch('data/1788790424.run')
+  const blob = await response.blob()
 
+  const exampleFile = new File([blob], '1788790424.run',{
+    type: blob.type
+  })
+  files.value = exampleFile
+}
 
 
 </script>
@@ -50,6 +58,9 @@ const resetFileUpload = () => {
     base: 'bg-transparent hover:bg-amber-800/25'
   }"
       />
+          <section class = 'file-button'>
+       <UButton type="submit" @click="exampleFileUpload">Example Run</UButton>
+          </section>
       <div v-if="files?.size" class="file-loader-overlay">
       <p v-if="errorMessage" style="color: red;">{{ errorMessage }}</p>
       <UButton type="reset" @click="resetFileUpload">Reset</UButton>
@@ -78,9 +89,10 @@ const resetFileUpload = () => {
   background-size: contain; 
   color: white; 
   display: grid;
-  place-items: center;     /* Centers horizontally and vertically instantly */
+  place-items: center;  
   width: 800px; 
   height: 600px; 
+  padding-top: 50px;
 }
 
 .file-loader-overlay {
@@ -96,6 +108,10 @@ const resetFileUpload = () => {
 .loader-header {
   text-align: center;
   padding: 2rem 1rem;
+}
+.file-button{
+   position: relative;
+  top: 50px;
 }
 
 .highlight{
