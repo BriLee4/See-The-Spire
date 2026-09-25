@@ -81,7 +81,7 @@ const exampleFileUpload = async () => {
             variant="ghost" 
             to="https://www.cloudflare.com/" 
             aria-label="Cloudflare" 
-            class="scale-150 p-4" 
+            class="scale-150" 
           />
         </div>
       </template>
