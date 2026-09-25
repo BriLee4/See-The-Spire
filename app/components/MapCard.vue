@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import type { translate } from '@nuxt/ui/runtime/utils/locale.js';
 import gsap from 'gsap'
 import type { FloorSummary } from '~/types/floorSummary'
 import { titleCase } from '~/utils/text'
@@ -76,19 +77,26 @@ function floorImage(floor: FloorSummary): string {
 <template>
   <div ref="card" class="map-card">
     <div v-for="act in floorsByAct" :key="act.actIndex" class="act-column">
+        <UPopover v-for="floor in act.floors.toReversed()" :key="floor.floorNumber" mode = "hover">
         <img
-          v-for="floor in act.floors.toReversed()"
-          :key="floor.floorNumber"
           :src="floorImage(floor)"
           :alt="titleCase(floor.roomType)"
-          :title="floorTitle(floor)"
           class="floor-node-img"
-        />
+          />
+          <template #content>
+          <Ucard
+           class = "floor-popover-card">
+           <div class="floor-description">
+            {{ floorTitle(floor) }}
+            </div>
+          </Ucard>
+          </template>
+        </UPopover>
          <h3 class="act-label">Act {{ act.actIndex + 1 }}: {{ act.actName }}</h3>
     </div>
   </div>
 </template>
-
+      
 <style scoped>
 .map-card {
   margin-inline: auto;
@@ -151,4 +159,5 @@ function floorImage(floor: FloorSummary): string {
   background-color: #c3a58b;
   border-radius: 50%;
 }
+
 </style>
