@@ -101,7 +101,7 @@ function floorImage(floor: FloorSummary): string {
   background-position: center;
   background-size: 100% 100%;
   color: white;
-  min-height: 50rem;
+  min-height:min(50rem, calc(100vh - 8rem));
   min-width: 25rem;
   width: max-content;
   height: max-content;
@@ -120,14 +120,14 @@ function floorImage(floor: FloorSummary): string {
   justify-content: flex-end; 
   gap: .375rem;
   height: 100%; 
-  padding: 1.25;
+  padding: 1.25rem;
   padding-bottom: 2.5rem;
 }
 
 .act-label {
   font-size: 1.25em;
   opacity: 0.8;
-  margin-top: 4px; 
+  margin-top: .25rem; 
   color: #271c0c;
   font-weight: 700;
 }
@@ -135,7 +135,7 @@ function floorImage(floor: FloorSummary): string {
 .floor-node {
   display: flex;
   justify-content: flex-end;
-  padding: .375rem .625;
+  padding: .375rem .625rem;
   border-radius: .5rem;
   background: #2a2640;
   font-size: 0.8rem;

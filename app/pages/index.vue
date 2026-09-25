@@ -36,7 +36,6 @@ const exampleFileUpload = async () => {
 </script>
 
 <template>
-   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <main class="main-page">
     <header class="loader-header">
         <h1>See<span class="highlight">The</span>Spire</h1>
@@ -93,7 +92,7 @@ const exampleFileUpload = async () => {
   position: relative;
   margin-inline: auto;   
   justify-content: center;
-  border-radius: 1.25; 
+  border-radius: 1.25rem; 
   background-image:url("/imgs/submenu_panel_short.png") ; 
   background-repeat: no-repeat;
   background-repeat: no-repeat; 

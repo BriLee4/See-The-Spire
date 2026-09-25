@@ -75,8 +75,8 @@ const relicTooltip = (id: string) => {
 
 <style scoped>
 .relics-card {
-  padding: 20px;
-  border-radius: 20px;
+  padding: 1.25rem;
+  border-radius: 1.25rem;
   color: white;
   display: flex;
   flex-direction: column;
@@ -92,7 +92,7 @@ const relicTooltip = (id: string) => {
   margin: 0 0 0.5rem 0;
 }
 .relic-popover-card {
-  max-width: 200;
+  max-width: 20rem;
 }
 .relic-description {
   white-space: normal;
@@ -101,7 +101,7 @@ const relicTooltip = (id: string) => {
 .icon-grid {
   display: flex;
   flex-wrap: wrap;
-  gap: 8px;
+  gap: .5rem;
 }
 .icon-wrap { position: relative; }
 .icon-img-relic {

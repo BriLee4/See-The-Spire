@@ -104,7 +104,7 @@ const backgroundClass = computed(() => {
 .stats-column {
   display: flex;
   flex-direction: column;
-  padding-top: 3.1 rem;
+  padding-top: 3.1rem;
   gap: .75rem;
 }
 .bg-overgrowth {
