@@ -98,14 +98,14 @@ const backgroundClass = computed(() => {
 .left-sidebar-wrapper{
   display: flex;
   flex-direction: column;
-  gap: 16px; 
+  gap: 1rem; 
 }
 
 .stats-column {
   display: flex;
   flex-direction: column;
-  padding-top: 50px;
-  gap: 12px;
+  padding-top: 3.1 rem;
+  gap: .75rem;
 }
 .bg-overgrowth {
   background-image: url("/imgs/overgrowth.webp");

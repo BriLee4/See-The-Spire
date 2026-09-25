@@ -93,16 +93,16 @@ function floorImage(floor: FloorSummary): string {
 .map-card {
   margin-inline: auto;
   margin-top: 1rem;
-  padding: 20px;
-  border-radius: 20px;
+  padding: 1.25rem;
+  border-radius: 1.25rem;
   background-image:url("/imgs/submenu_panel.png") ; 
   background-repeat: no-repeat;
   background-repeat: no-repeat; 
   background-position: center;
   background-size: 100% 100%;
   color: white;
-  min-height: 800px;
-  min-width: 400px;
+  min-height: 50rem;
+  min-width: 25rem;
   width: max-content;
   height: max-content;
   display: flex;
@@ -118,10 +118,10 @@ function floorImage(floor: FloorSummary): string {
   flex: 1 1 0px; 
   text-align: center; 
   justify-content: flex-end; 
-  gap: 6px;
+  gap: .375rem;
   height: 100%; 
-  padding: 20px;
-  padding-bottom: 40px;
+  padding: 1.25;
+  padding-bottom: 2.5rem;
 }
 
 .act-label {
@@ -135,17 +135,17 @@ function floorImage(floor: FloorSummary): string {
 .floor-node {
   display: flex;
   justify-content: flex-end;
-  padding: 6px 10px;
-  border-radius: 8px;
+  padding: .375rem .625;
+  border-radius: .5rem;
   background: #2a2640;
   font-size: 0.8rem;
   cursor: default;
-  margin-bottom: 6px;
+  margin-bottom: .375rem;
 }
 
 .floor-node-img {
-  width: 48px;
-  height: 48px;
+  width: 3rem;
+  height: 3rem;
   object-fit: contain;
   cursor: default;
   background-color: #c3a58b;

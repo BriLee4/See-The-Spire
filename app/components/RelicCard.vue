@@ -55,7 +55,7 @@ const relicTooltip = (id: string) => {
         </UPopover>
       </div>
     </section>
-  </div>
+
 
     <section class="icon-section">
       <h3 class="section-label">Final Deck</h3>
@@ -68,8 +68,9 @@ const relicTooltip = (id: string) => {
           />
           <span v-if="entry.count > 1" class="icon-count">{{ entry.count }}</span>
         </div>
-      </div>
+      </div> 
     </section>
+    </div>
 </template>
 
 <style scoped>
@@ -80,8 +81,8 @@ const relicTooltip = (id: string) => {
   display: flex;
   flex-direction: column;
   gap: 1.25rem;
-  margin-top: 75px;
-  padding-left: 50px;
+  margin-top: 4.5rem;
+  padding-left: 3.125rem;
 }
 .section-label {
   font-size: 2em;
@@ -104,29 +105,29 @@ const relicTooltip = (id: string) => {
 }
 .icon-wrap { position: relative; }
 .icon-img-relic {
-  width: 48px;
-  height: 48px;
+  width: 3rem;
+  height: 3rem;
   object-fit: contain;
   background-color: #2a2640;
   border-radius: 50%;
 }
 
 .icon-img-card {
-  width: 150px;
-  height: 200px;
+  width: 9rem;
+  height:12.5rem;
   object-fit: contain; /* Prevents stretching if the source image ratio varies slightly */
 }
 .icon-count {
   position: absolute;
-  bottom: 4px;
-  right: 4px;
+  bottom: .25rem;
+  right: .25rem;
   background: #fec000;
   color: black;
   font-size: 0.85rem;
   font-weight: 700;
   border-radius: 50%;
-  width: 24px;
-  height: 24px;
+  width: 1.5rem;
+  height: 1.5rem;
   display: flex;
   align-items: center;
   justify-content: center;

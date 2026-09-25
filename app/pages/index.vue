@@ -8,7 +8,7 @@ watch(files, async(file) => {
     errorMessage.value = 'Invalid file type. Please upload a .run file.'
     return
   } 
-
+ 
   const text = await file.text()
   const parsed = JSON.parse(text)
 
@@ -36,6 +36,7 @@ const exampleFileUpload = async () => {
 </script>
 
 <template>
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <main class="main-page">
     <header class="loader-header">
         <h1>See<span class="highlight">The</span>Spire</h1>
@@ -49,7 +50,7 @@ const exampleFileUpload = async () => {
       highlight
       label="Drop your .run file here"
       description=".run files are located in your Slay the Spire save folder"
-      class="w-90 h-120 -translate-x-1"
+      class="w-60 h-75 -translate-x-1 translate-y-8"
       accept= ".run"
       size=''
       :file-delete="false"
@@ -62,29 +63,37 @@ const exampleFileUpload = async () => {
   }"
       />
           <section class = 'file-button'>
-       <UButton type="submit" size="xl" color ="secondary" @click="exampleFileUpload">Example Run</UButton>
+       <UButton type="submit" size="lg" color ="secondary" @click="exampleFileUpload">Example Run</UButton>
           </section>
       <div v-if="files?.size" class="file-loader-overlay">
       <p v-if="errorMessage" style="color: red;">{{ errorMessage }}</p>
       <UButton type="reset" @click="resetFileUpload">Reset</UButton>
     </div>
     </section>
+    <UFooter>
+          <template #center>
+        <UButton
+          icon="i-simple-icons-cloudflare"
+          color="neutral"
+          variant="ghost"
+          to="https://www.cloudflare.com/"
+          target="_blank"
+          aria-label="Cloudflare"
+        />
+      </template>
+    </UFooter>
   </main>
 </template>
 <style scoped>
 .main-page{
-    font-size: 25px;
-    background-color: #1e1b2e;
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
-    min-height: 100vh;
+ font-size: 1.5rem; 
+  min-height: 100vh; 
 }
 .file-loader { 
   position: relative;
   margin-inline: auto;   
   justify-content: center;
-  border-radius: 20px; 
+  border-radius: 1.25; 
   background-image:url("/imgs/submenu_panel_short.png") ; 
   background-repeat: no-repeat;
   background-repeat: no-repeat; 
@@ -93,9 +102,10 @@ const exampleFileUpload = async () => {
   color: white; 
   display: grid;
   place-items: center;  
-  width: 800px; 
-  height: 600px; 
-  padding-top: 50px;
+  width: 30rem; 
+  height: 24rem; 
+  padding-top: 3.1px;
+    font-size: 1rem;
 }
 
 .file-loader-overlay {
@@ -103,7 +113,7 @@ const exampleFileUpload = async () => {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 8px;
+  gap: .5rem;
   z-index: 10;
   
 }
