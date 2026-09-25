@@ -49,7 +49,7 @@ const exampleFileUpload = async () => {
       highlight
       label="Drop your .run file here"
       description=".run files are located in your Slay the Spire save folder"
-      class="w-60 h-75 -translate-x-1 translate-y-8"
+      class="w-100 h-135 -translate-x-1 translate-y-12"
       accept= ".run"
       size=''
       :file-delete="false"
@@ -61,7 +61,7 @@ const exampleFileUpload = async () => {
     label:'text-white'
   }"
       />
-          <section class = 'file-button'>
+      <section class = 'file-button'>
        <UButton type="submit" size="lg" color ="secondary" @click="exampleFileUpload">Example Run</UButton>
           </section>
       <div v-if="files?.size" class="file-loader-overlay">
@@ -69,24 +69,28 @@ const exampleFileUpload = async () => {
       <UButton type="reset" @click="resetFileUpload">Reset</UButton>
     </div>
     </section>
-    <UFooter>
-          <template #center>
-        <UButton
-          icon="i-simple-icons-cloudflare"
-          color="neutral"
-          variant="ghost"
-          to="https://www.cloudflare.com/"
-          target="_blank"
-          aria-label="Cloudflare"
-        />
-      </template>
-    </UFooter>
   </main>
+    <Footer >
+      <template #default>
+        <div class="flex justify-center items-center">
+          <UButton 
+            label="Protected by Cloudflare"
+            icon="i-devicon-cloudflare" 
+            trailing
+            color="neutral" 
+            variant="ghost" 
+            to="https://www.cloudflare.com/" 
+            aria-label="Cloudflare" 
+            class="scale-150 p-4" 
+          />
+        </div>
+      </template>
+    </Footer>
 </template>
 <style scoped>
 .main-page{
  font-size: 1.5rem; 
-  min-height: 100vh; 
+  min-height: 95vh; 
 }
 .file-loader { 
   position: relative;
@@ -102,9 +106,9 @@ const exampleFileUpload = async () => {
   display: grid;
   place-items: center;  
   width: 30rem; 
-  height: 24rem; 
+  height: 45rem; 
   padding-top: 3.1px;
-    font-size: 1rem;
+    font-size: 1.5rem;
 }
 
 .file-loader-overlay {
