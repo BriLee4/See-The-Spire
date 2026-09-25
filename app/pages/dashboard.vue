@@ -35,7 +35,8 @@ const backgroundClass = computed(() => {
 </script>
 
 <template>
-  <main class="dashboard" :class="backgroundClass">
+  <div class="page-container"  :class="backgroundClass">
+  <main class="dashboard">
   <div class="left-sidebar-wrapper">
       <div class="back-button-container">
         <UButton
@@ -76,20 +77,39 @@ const backgroundClass = computed(() => {
       <RelicCard :relics="player?.relics ?? []" :deck="player?.deck ?? []" />
     </section>
   </main>
+   <Footer>
+      <template #default>
+        <div class="flex justify-center items-center">
+          <UButton 
+            label="Protected by Cloudflare"
+            icon="i-devicon-cloudflare" 
+            trailing
+            color="neutral" 
+            variant="ghost" 
+            to="https://www.cloudflare.com/" 
+            aria-label="Cloudflare" 
+            class="scale-150 -translate-y-5" 
+          />
+        </div>
+      </template>
+    </Footer>
+  </div>
 </template>
 <style scoped>
-
-.dashboard {
-  margin: 0;
-  padding: 2rem;
+.page-container{
   background-image:url("./imgs/overgrowth.webp") ; 
   background-repeat: no-repeat;
-  background-repeat: no-repeat; 
   background-position: center;
   background-size: cover;
   background-attachment: fixed;
-  color: white;
   min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+.dashboard {
+  margin: 0;
+  padding: 2rem;
+  color: white;
   display: grid;
   grid-template-columns: 1fr auto 1fr;
   gap: 2rem;
@@ -98,14 +118,14 @@ const backgroundClass = computed(() => {
 .left-sidebar-wrapper{
   display: flex;
   flex-direction: column;
-  gap: 16px; 
+  gap: 1rem; 
 }
 
 .stats-column {
   display: flex;
   flex-direction: column;
-  padding-top: 50px;
-  gap: 12px;
+  padding-top: 3.1rem;
+  gap: .75rem;
 }
 .bg-overgrowth {
   background-image: url("/imgs/overgrowth.webp");

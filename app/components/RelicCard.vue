@@ -46,7 +46,9 @@ const relicTooltip = (id: string) => {
         <UPopover v-for="relic in relics" :key="relic.id" mode="hover">
           <img :src="relicImage(relic.id)" :alt="relicName(relic.id)" class="icon-img-relic" />
           <template #content>
-            <UCard class="relic-popover-card">
+            <UCard 
+            :ui="{ body: 'p-2 sm:p-2'  }"
+            class="relic-popover-card">
               <div class="relic-description">
                 {{ relicTooltip(relic.id) }}
               </div>
@@ -55,7 +57,7 @@ const relicTooltip = (id: string) => {
         </UPopover>
       </div>
     </section>
-  </div>
+
 
     <section class="icon-section">
       <h3 class="section-label">Final Deck</h3>
@@ -68,20 +70,21 @@ const relicTooltip = (id: string) => {
           />
           <span v-if="entry.count > 1" class="icon-count">{{ entry.count }}</span>
         </div>
-      </div>
+      </div> 
     </section>
+    </div>
 </template>
 
 <style scoped>
 .relics-card {
-  padding: 20px;
-  border-radius: 20px;
+  padding: 1.25rem;
+  border-radius: 1.25rem;
   color: white;
   display: flex;
   flex-direction: column;
   gap: 1.25rem;
-  margin-top: 75px;
-  padding-left: 50px;
+  margin-top: 4.5rem;
+  padding-left: 3.125rem;
 }
 .section-label {
   font-size: 2em;
@@ -91,7 +94,7 @@ const relicTooltip = (id: string) => {
   margin: 0 0 0.5rem 0;
 }
 .relic-popover-card {
-  max-width: 200;
+  max-width: 15rem;
 }
 .relic-description {
   white-space: normal;
@@ -100,33 +103,33 @@ const relicTooltip = (id: string) => {
 .icon-grid {
   display: flex;
   flex-wrap: wrap;
-  gap: 8px;
+  gap: .5rem;
 }
 .icon-wrap { position: relative; }
 .icon-img-relic {
-  width: 48px;
-  height: 48px;
+  width: 3rem;
+  height: 3rem;
   object-fit: contain;
   background-color: #2a2640;
   border-radius: 50%;
 }
 
 .icon-img-card {
-  width: 150px;
-  height: 200px;
+  width: 9rem;
+  height:12.5rem;
   object-fit: contain; /* Prevents stretching if the source image ratio varies slightly */
 }
 .icon-count {
   position: absolute;
-  bottom: 4px;
-  right: 4px;
+  bottom: .25rem;
+  right: .25rem;
   background: #fec000;
   color: black;
   font-size: 0.85rem;
   font-weight: 700;
   border-radius: 50%;
-  width: 24px;
-  height: 24px;
+  width: 1.5rem;
+  height: 1.5rem;
   display: flex;
   align-items: center;
   justify-content: center;

@@ -1,7 +1,7 @@
 import type { MapPoint } from '~/types/map'
 
 interface RawMapData {
-  Point: MapPoint[]   // or RawMapPoint[][] if grouped by row — tell me which
+  Point: MapPoint[] 
 }
 
 function parseMapPoint(raw: MapPoint): MapPoint {

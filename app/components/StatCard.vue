@@ -28,10 +28,10 @@ onMounted(() => {
 .stat-card {
   display: flex;
   flex-direction: column;
-  padding: 10px;
-  border-radius: 20px;
+  padding: .625rem;
+  border-radius: 1.25rem;
   color: white;
-  width:400px;
+  width:25rem;
   text-align: center;
   gap: 0.5rem;
   margin-left: auto;

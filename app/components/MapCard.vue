@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import type { translate } from '@nuxt/ui/runtime/utils/locale.js';
 import gsap from 'gsap'
 import type { FloorSummary } from '~/types/floorSummary'
 import { titleCase } from '~/utils/text'
@@ -76,33 +77,40 @@ function floorImage(floor: FloorSummary): string {
 <template>
   <div ref="card" class="map-card">
     <div v-for="act in floorsByAct" :key="act.actIndex" class="act-column">
+        <UPopover v-for="floor in act.floors.toReversed()" :key="floor.floorNumber" mode = "hover">
         <img
-          v-for="floor in act.floors.toReversed()"
-          :key="floor.floorNumber"
           :src="floorImage(floor)"
           :alt="titleCase(floor.roomType)"
-          :title="floorTitle(floor)"
           class="floor-node-img"
-        />
+          />
+          <template #content>
+          <Ucard
+           class = "floor-popover-card">
+           <div class="floor-description">
+            {{ floorTitle(floor) }}
+            </div>
+          </Ucard>
+          </template>
+        </UPopover>
          <h3 class="act-label">Act {{ act.actIndex + 1 }}: {{ act.actName }}</h3>
     </div>
   </div>
 </template>
-
+      
 <style scoped>
 .map-card {
   margin-inline: auto;
   margin-top: 1rem;
-  padding: 20px;
-  border-radius: 20px;
+  padding: 1.25rem;
+  border-radius: 1.25rem;
   background-image:url("/imgs/submenu_panel.png") ; 
   background-repeat: no-repeat;
   background-repeat: no-repeat; 
   background-position: center;
   background-size: 100% 100%;
   color: white;
-  min-height: 800px;
-  min-width: 400px;
+  min-height:min(50rem, calc(100vh - 8rem));
+  min-width: 25rem;
   width: max-content;
   height: max-content;
   display: flex;
@@ -118,16 +126,16 @@ function floorImage(floor: FloorSummary): string {
   flex: 1 1 0px; 
   text-align: center; 
   justify-content: flex-end; 
-  gap: 6px;
+  gap: .375rem;
   height: 100%; 
-  padding: 20px;
-  padding-bottom: 40px;
+  padding: 1.25rem;
+  padding-bottom: 2.5rem;
 }
 
 .act-label {
   font-size: 1.25em;
   opacity: 0.8;
-  margin-top: 4px; 
+  margin-top: .25rem; 
   color: #271c0c;
   font-weight: 700;
 }
@@ -135,20 +143,21 @@ function floorImage(floor: FloorSummary): string {
 .floor-node {
   display: flex;
   justify-content: flex-end;
-  padding: 6px 10px;
-  border-radius: 8px;
+  padding: .375rem .625rem;
+  border-radius: .5rem;
   background: #2a2640;
   font-size: 0.8rem;
   cursor: default;
-  margin-bottom: 6px;
+  margin-bottom: .375rem;
 }
 
 .floor-node-img {
-  width: 48px;
-  height: 48px;
+  width: 3rem;
+  height: 3rem;
   object-fit: contain;
   cursor: default;
   background-color: #c3a58b;
   border-radius: 50%;
 }
+
 </style>
