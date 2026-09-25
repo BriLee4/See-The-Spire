@@ -46,7 +46,9 @@ const relicTooltip = (id: string) => {
         <UPopover v-for="relic in relics" :key="relic.id" mode="hover">
           <img :src="relicImage(relic.id)" :alt="relicName(relic.id)" class="icon-img-relic" />
           <template #content>
-            <UCard class="relic-popover-card">
+            <UCard 
+            :ui="{ body: 'p-2 sm:p-2'  }"
+            class="relic-popover-card">
               <div class="relic-description">
                 {{ relicTooltip(relic.id) }}
               </div>
@@ -92,7 +94,7 @@ const relicTooltip = (id: string) => {
   margin: 0 0 0.5rem 0;
 }
 .relic-popover-card {
-  max-width: 20rem;
+  max-width: 15rem;
 }
 .relic-description {
   white-space: normal;
