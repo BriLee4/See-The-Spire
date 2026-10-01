@@ -84,12 +84,13 @@ function floorImage(floor: FloorSummary): string {
           class="floor-node-img"
           />
           <template #content>
-          <Ucard
+          <UCard
+          :ui="{ body: 'p-2 sm:p-2'  }"
            class = "floor-popover-card">
            <div class="floor-description">
             {{ floorTitle(floor) }}
             </div>
-          </Ucard>
+          </UCard>
           </template>
         </UPopover>
          <h3 class="act-label">Act {{ act.actIndex + 1 }}: {{ act.actName }}</h3>

@@ -44,7 +44,7 @@ const relicTooltip = (id: string) => {
       <h3 class="section-label">Relics</h3>
       <div class="icon-grid">
         <UPopover v-for="relic in relics" :key="relic.id" mode="hover">
-          <img :src="relicImage(relic.id)" :alt="relicName(relic.id)" class="icon-img-relic" />
+          <img :src="relicImage(relic.id)" :alt="relicName(relic.id)" width="48" height="48" decoding="async" class="icon-img-relic" />
           <template #content>
             <UCard 
             :ui="{ body: 'p-2 sm:p-2'  }"
@@ -66,6 +66,10 @@ const relicTooltip = (id: string) => {
           <img
             :src="cardImageUrl(entry.card.id, !!entry.card.current_upgrade_level)"
             :alt="cardDisplayName(entry.card.id)"
+            width="144"
+            height="200"
+            loading="lazy"
+            decoding="async"
             class="icon-img-card"
           />
           <span v-if="entry.count > 1" class="icon-count">{{ entry.count }}</span>

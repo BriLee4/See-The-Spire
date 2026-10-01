@@ -4,7 +4,10 @@
   "main": "./.output/server/index.mjs",
   "compatibility_date": "2026-09-18",
   "observability": {
-    "enabled": true
+    "enabled": true,
+    "traces": {
+      "enabled": true
+    }
   },
    "d1_databases": [
     {
