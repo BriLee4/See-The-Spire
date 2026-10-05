@@ -1,7 +1,5 @@
 <script setup lang="ts">
-import gsap from 'gsap'
 import type { Run } from '~/types/run'
-import type { FloorSummary } from '~/types/floorSummary'
 const router = useRouter()
 const runFile = useRunFile()
 const { runs, loadRuns } = useRuns()
@@ -18,7 +16,7 @@ onMounted(async () => {
   loadFloors(runFile.value.data as Run)
 })
 function goBack() {
-  router.back() //
+  router.back()
 }
 const act1Name = computed(() => {
   const firstFloor = floors.value?.[0]
@@ -77,7 +75,7 @@ const backgroundClass = computed(() => {
       <RelicCard :relics="player?.relics ?? []" :deck="player?.deck ?? []" />
     </section>
   </main>
-   <Footer>
+   <UFooter>
       <template #default>
         <div class="flex justify-center items-center">
           <UButton 
@@ -92,12 +90,12 @@ const backgroundClass = computed(() => {
           />
         </div>
       </template>
-    </Footer>
+    </UFooter>
   </div>
 </template>
 <style scoped>
 .page-container{
-  background-image:url("./imgs/overgrowth.webp") ; 
+  background-image:url("/imgs/overgrowth.webp") ; 
   background-repeat: no-repeat;
   background-position: center;
   background-size: cover;
@@ -138,13 +136,10 @@ const backgroundClass = computed(() => {
 .back-button-container {
   display: flex;
   justify-content: flex-start;
+  margin-bottom: 1rem;
 }
 .highlight{
   color: #fec000;  -webkit-text-stroke: .5px black;
-}
-
-.back-button-container {
-  margin-bottom: 1rem;
 }
 
 .main-content-column {

@@ -1,7 +1,6 @@
 import { useRunFile } from './useRunFile'
 import type { Run } from '~/types/run'
 import type { RunSummary } from '~/types/runSummary'
-import type { FloorSummary } from '~/types/floorSummary'
 
 
 

@@ -9,21 +9,33 @@ watch(files, async(file) => {
     return
   } 
  
-  const text = await file.text()
-  const parsed = JSON.parse(text)
-
-  runFile.value = { name: file.name, data: parsed}
-
+errorMessage.value = ''
+let parsed
+try {
+  parsed = JSON.parse(await file.text())
+} catch {
+  errorMessage.value = "Couldn't read that file. Is it a valid .run file?"
+  return
+}
+if (!parsed?.players?.length || !Array.isArray(parsed?.map_point_history)) {
+  errorMessage.value = "That file doesn't look like a Slay the Spire 2 run."
+  return
+}
+runFile.value = { name: file.name, data: parsed }
   await navigateTo('/dashboard')
-
 })
+
 const resetFileUpload = () => {
   files.value = null
   runFile.value = null
   errorMessage.value = ''
 }
 const exampleFileUpload = async () => {
-  const response = await fetch('data/1788790424.run')
+  const response = await fetch('/data/1788790424.run')
+  if(!response.ok){
+    errorMessage.value = "Could not load example run"
+    return
+  }
   const blob = await response.blob()
 
   const exampleFile = new File([blob], '1788790424.run',{
@@ -62,15 +74,16 @@ const exampleFileUpload = async () => {
   }"
       />
       <section class = 'file-button'>
-       <UButton type="submit" size="lg" color ="secondary" @click="exampleFileUpload">Example Run</UButton>
+       <UButton size="lg" color="secondary" @click="exampleFileUpload">Example Run</UButton>
           </section>
-      <div v-if="files?.size" class="file-loader-overlay">
-      <p v-if="errorMessage" style="color: red;">{{ errorMessage }}</p>
+           <div v-if="files?.size || errorMessage" class="file-loader-overlay">
+             <p v-if="errorMessage" class="text-red-400">{{ errorMessage }}</p>
+
       <UButton type="reset" @click="resetFileUpload">Reset</UButton>
     </div>
     </section>
   </main>
-    <Footer >
+    <UFooter>
       <template #default>
         <div class="flex justify-center items-center">
           <UButton 
@@ -85,7 +98,7 @@ const exampleFileUpload = async () => {
           />
         </div>
       </template>
-    </Footer>
+    </UFooter>
 </template>
 <style scoped>
 .main-page{

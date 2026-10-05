@@ -26,6 +26,8 @@ onMounted(() => {
 
 <style scoped>
 .stat-card {
+  width: 100%;
+  max-width: 25rem;
   display: flex;
   flex-direction: column;
   padding: .625rem;
