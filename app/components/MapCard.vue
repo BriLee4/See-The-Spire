@@ -51,24 +51,24 @@ const BOSS_IMAGES = new Set([
 
 function findAncient(floor: FloorSummary): string {
   const key = floor.encounterId?.replace(/^EVENT\./, '').toLowerCase()
-  return key && ANCIENT_EVENT_IMAGES.has(key) ? `/imgs/${key}.png` : '/imgs/stats_ancients.png'
+  return key && ANCIENT_EVENT_IMAGES.has(key) ? `https://cdn.seethespire.com/node/ancient/${key}.png` : '/imgs/stats_ancients.png'
 }
 
 function findBoss(floor: FloorSummary): string {
   const key = floor.encounterId?.replace(/^ENCOUNTER\./, '').toLowerCase()
-  return key && BOSS_IMAGES.has(key) ? `/imgs/${key}.png` : '/imgs/lagavulin_matriarch_boss.png'
+  return key && BOSS_IMAGES.has(key) ? `https://cdn.seethespire.com/node/boss/${key}.png` : '/imgs/lagavulin_matriarch_boss.png'
 }
 
 function floorImage(floor: FloorSummary): string {
   if (floor.mapPointType === 'ancient') return findAncient(floor)
   switch (floor.roomType) {
-    case 'monster': return '/imgs/monster.png'
-    case 'elite': return '/imgs/elite.png'
+    case 'monster': return 'https://cdn.seethespire.com/node/monster.png'
+    case 'elite': return 'https://cdn.seethespire.com/node/elite.png'
     case 'boss': return findBoss(floor)
-    case 'treasure': return '/imgs/stats_chest.png'
-    case 'shop': return '/imgs/shop.png'
-    case 'rest_site': return '/imgs/rest_site.png'
-    default: return '/imgs/stats_questionmark.png' // shop, rest_site, event, unknown
+    case 'treasure': return 'https://cdn.seethespire.com/node/stats_chest.png'
+    case 'shop': return 'https://cdn.seethespire.com/node/shop.png'
+    case 'rest_site': return 'https://cdn.seethespire.com/node/rest_site.png'
+    default: return 'https://cdn.seethespire.com/node/stats_questionmark.png' // shop, rest_site, event, unknown
   }
 }
 

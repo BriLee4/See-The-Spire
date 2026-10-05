@@ -12,15 +12,3 @@ function parseMapPoint(raw: MapPoint): MapPoint {
     ChildIds: raw.ChildIds,
   }
 }
-
-export function useMap() {
-  const map = ref<MapPoint[]>([])
-
-  async function loadMap(actFile: string) {
-    const text = await $fetch<string>(`/data/${actFile}`, { responseType: 'text' })
-    const raw: RawMapData = JSON.parse(text)
-    map.value = raw.Point.map(parseMapPoint)
-  }
-
-  return { map, loadMap }
-}

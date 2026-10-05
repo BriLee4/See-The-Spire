@@ -17,6 +17,14 @@
        "remote": true
     }
   ],
+     "previews": {
+      "d1_databases": [
+        {
+          "binding": "DB",
+          "database_id": "11ee83c1-fcf7-49be-bf9b-6c0c19e969cd"
+        }
+      ]
+    },
   "assets": {
     "binding": "ASSETS",
     "directory": "./.output/public/"
