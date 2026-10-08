@@ -216,7 +216,7 @@ const sections = computed<{ title: string; tone: string; points: CoachPoint[] }[
 
 <style scoped>
 .page-container {
-  background-image: url("/imgs/overgrowth.webp");
+  background-image: url("/imgs/the_architect_event_encounter.webp");
   background-repeat: no-repeat;
   background-position: center;
   background-size: cover;

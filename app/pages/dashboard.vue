@@ -16,7 +16,7 @@ onMounted(async () => {
   loadFloors(runFile.value.data as Run)
 })
 function goBack() {
-  router.back()
+  navigateTo('/')
 }
 const act1Name = computed(() => {
   const firstFloor = floors.value?.[0]
@@ -44,7 +44,7 @@ const backgroundClass = computed(() => {
           color="neutral"
           @click="goBack"
         >
-          Back
+          Upload A New Run
         </UButton>
         <UButton
           icon="i-heroicons-sparkles"
