@@ -1,6 +1,6 @@
 import type { Run } from '../../app/types/run'
 import type { AnalyzeResponse } from '#shared/types/runAnalysis'
-import type { RelicText } from '../utils/runDigest'
+import type { CardText, RelicText } from '../utils/runDigest'
 
 const MAX_RUN_BYTES = 2_000_000
 const CACHE_TTL_SECONDS = 60 * 60 * 24 * 30
@@ -21,8 +21,8 @@ export default defineEventHandler(async (event): Promise<AnalyzeResponse> => {
     throw createError({ statusCode: 400, statusMessage: "That doesn't look like a Slay the Spire 2 run" })
   }
 
-  const relics = await loadRelicText(relicIds(run))
-  const digest = buildRunDigest(run, relics)
+  const [relics, cards] = await Promise.all([loadRelicText(relicIds(run)), loadCardText(cardIds(run))])
+  const digest = buildRunDigest(run, { relics, cards })
   const { facts } = digest
   const model = env.AI_MODEL
   const runHash = await sha256(digest.text)
@@ -46,21 +46,18 @@ export default defineEventHandler(async (event): Promise<AnalyzeResponse> => {
   const started = Date.now()
   let raw: unknown
   try {
-    const result = await env.AI.run(model, {
-      messages: [
-        { role: 'system', content: SYSTEM_PROMPT },
-        { role: 'user', content: userPrompt(digest.text) }
-      ],
-      response_format: { type: 'json_schema', json_schema: ANALYSIS_SCHEMA },
-      max_tokens: 2048,
-      temperature: 0.4
-    }, {
-      gateway: {
-        id: env.AI_GATEWAY_ID,
-        metadata: { key, promptVersion: PROMPT_VERSION, character: facts.character, win: facts.win }
+    // The input shape depends on the model (see buildModelRequest), so the per-model typings can't apply here.
+    const result = await (env.AI.run as (model: string, input: unknown, options: AiOptions) => Promise<unknown>)(
+      model,
+      buildModelRequest(model, digest.text),
+      {
+        gateway: {
+          id: env.AI_GATEWAY_ID,
+          metadata: { key, promptVersion: PROMPT_VERSION, character: facts.character, win: facts.win }
+        }
       }
-    })
-    raw = parseModelJson((result as { response?: unknown }).response)
+    )
+    raw = parseModelOutput(result)
   } catch (err) {
     trackCoachEvent(env, 'ai_error', { ...tags, latencyMs: Date.now() - started })
     console.error('AI analysis failed', err)
@@ -78,7 +75,8 @@ export default defineEventHandler(async (event): Promise<AnalyzeResponse> => {
   }
 
   const response: CachedAnalysis = { key, model, promptVersion: PROMPT_VERSION, facts, analysis }
-  const gatewayLogId = env.AI.aiGatewayLogId
+  // Only set when the call went through AI Gateway; D1 rejects anything but a string or null.
+  const gatewayLogId = typeof env.AI.aiGatewayLogId === 'string' ? env.AI.aiGatewayLogId : null
 
   // Persist after responding; none of this should slow the player down.
   event.waitUntil(Promise.allSettled([
@@ -99,18 +97,25 @@ export default defineEventHandler(async (event): Promise<AnalyzeResponse> => {
   return { ...response, cached: false }
 })
 
-async function loadRelicText(ids: string[]): Promise<Map<string, RelicText>> {
-  if (!ids.length) return new Map()
-  const placeholders = ids.map(() => '?').join(',')
-  const rows = await useDatabase('myDatabase')
-    .prepare(`SELECT id, name, description FROM relics WHERE id IN (${placeholders})`)
-    .all(...ids) as ({ id: string } & RelicText)[]
-  return new Map(rows.map(r => [r.id, { name: r.name, description: r.description }]))
+// D1 allows at most 100 bound parameters per query; a long run can touch more cards than that.
+async function selectByIds<T>(table: 'cards' | 'relics', columns: string, ids: string[]): Promise<T[]> {
+  const db = useDatabase('myDatabase')
+  const rows: T[] = []
+  for (let i = 0; i < ids.length; i += 90) {
+    const chunk = ids.slice(i, i + 90)
+    const placeholders = chunk.map(() => '?').join(',')
+    rows.push(...await db.prepare(`SELECT ${columns} FROM ${table} WHERE id IN (${placeholders})`).all(...chunk) as T[])
+  }
+  return rows
 }
 
-// JSON mode usually returns an object, but some models return a string (sometimes fenced).
-function parseModelJson(response: unknown): unknown {
-  if (typeof response !== 'string') return response
-  const text = response.trim().replace(/^```(?:json)?\s*/i, '').replace(/```$/, '')
-  return JSON.parse(text)
+async function loadCardText(ids: string[]): Promise<Map<string, CardText>> {
+  const rows = await selectByIds<Record<string, unknown>>('cards',
+    'id, name, cost, is_x_cost, star_cost, type, rarity, description, upgrade_description, upgrade', ids)
+  return new Map(rows.map(r => [String(r.id), toCardText(r)]))
+}
+
+async function loadRelicText(ids: string[]): Promise<Map<string, RelicText>> {
+  const rows = await selectByIds<{ id: string } & RelicText>('relics', 'id, name, description', ids)
+  return new Map(rows.map(r => [r.id, { name: r.name, description: r.description }]))
 }

@@ -9,6 +9,24 @@ export interface RelicText {
   description: string | null
 }
 
+// One card's text as the coach sees it. Built from a D1 `cards` row or a data/cards.json entry.
+export interface CardText {
+  name: string
+  cost: number | null          // -1 = unplayable
+  isXCost: boolean
+  starCost: number | null      // Regent star cost
+  type: string | null
+  rarity: string | null
+  description: string | null
+  upgradeDescription: string | null
+  upgrade: Record<string, unknown> | null   // null = can't be upgraded
+}
+
+export interface DigestReference {
+  relics?: Map<string, RelicText>
+  cards?: Map<string, CardText>
+}
+
 export interface RunDigest {
   facts: RunFacts
   text: string
@@ -20,10 +38,11 @@ export function stripId(id: string | null | undefined): string {
   return (id ?? '').replace(PREFIX, '')
 }
 
-// "[gold]Vigor[/gold]" -> "Vigor", "[star:3]" -> "3 stars"
+// "[gold]Vigor[/gold]" -> "Vigor", "[star:3]" -> "3 stars", "[energy:2]" -> "2 energy"
 export function stripMarkup(text: string): string {
   return text
     .replace(/\[star:(\d+)\]/g, '$1 stars')
+    .replace(/\[energy:(\d+)\]/g, '$1 energy')
     .replace(/\[\/?[a-z_]+(:[^\]]*)?\]/gi, '')
     .replace(/\s+/g, ' ')
     .trim()
@@ -38,6 +57,95 @@ export function relicIds(run: Run): string[] {
     for (const a of stats.ancient_choice ?? []) ids.add(stripId(a.TextKey))
   }
   return [...ids].filter(Boolean)
+}
+
+// Every card the run touched: final deck, every reward/shop offer (picked or not), gains, removals, upgrades.
+// Offers matter: judging a pick needs the text of the cards that were passed on.
+export function cardIds(run: Run): string[] {
+  const ids = new Set<string>()
+  for (const card of run.players[0]?.deck ?? []) ids.add(stripId(card.id))
+  for (const stats of allStats(run)) {
+    for (const choice of stats.card_choices ?? []) ids.add(stripId(choice.card.id))
+    for (const card of stats.cards_gained ?? []) ids.add(stripId(card.id))
+    for (const card of stats.cards_removed ?? []) ids.add(stripId(card.id))
+    for (const id of stats.upgraded_cards ?? []) ids.add(stripId(id))
+    for (const id of stats.bought_colorless ?? []) ids.add(stripId(id))
+  }
+  return [...ids].filter(Boolean)
+}
+
+// Accepts a D1 row (JSON columns as strings) or a data/cards.json entry (already parsed).
+export function toCardText(row: Record<string, unknown>): CardText {
+  const num = (v: unknown) => (typeof v === 'number' ? v : null)
+  const str = (v: unknown) => (typeof v === 'string' && v ? v : null)
+  let upgrade = row.upgrade
+  if (typeof upgrade === 'string') {
+    try { upgrade = JSON.parse(upgrade) } catch { upgrade = null }
+  }
+  return {
+    name: String(row.name ?? row.id ?? ''),
+    cost: num(row.cost),
+    isXCost: !!row.is_x_cost,
+    starCost: num(row.star_cost),
+    type: str(row.type),
+    rarity: str(row.rarity),
+    description: str(row.description),
+    upgradeDescription: str(row.upgrade_description),
+    upgrade: upgrade && typeof upgrade === 'object' ? upgrade as Record<string, unknown> : null
+  }
+}
+
+// {"cost":0} -> "cost 0", {"add_innate":1} -> "gains Innate", {"damage":"+3"} -> "damage +3"
+function describeUpgrade(upgrade: Record<string, unknown>): string {
+  return Object.entries(upgrade).map(([key, value]) => {
+    const word = (k: string) => k.charAt(0).toUpperCase() + k.slice(1)
+    if (key.startsWith('add_')) return `gains ${word(key.slice(4))}`
+    if (key.startsWith('remove_')) return `loses ${word(key.slice(7))}`
+    return `${key} ${value}`
+  }).join(', ')
+}
+
+// "Deal 6 damage." + "Deal 8 damage." -> "Deal 6→8 damage." When the upgrade only changes numbers (most cards),
+// this says the same thing in half the tokens. Returns null when the texts differ in more than numbers.
+function inlineUpgrade(base: string, upgraded: string): string | null {
+  const a = base.split(' ')
+  const b = upgraded.split(' ')
+  if (a.length !== b.length) return null
+  let changed = false
+  const merged = a.map((word, i) => {
+    if (word === b[i]) return word
+    const numbers = /^(\D*)(\d+)(\D*)$/
+    const [ma, mb] = [numbers.exec(word), numbers.exec(b[i]!)]
+    if (!ma || !mb || ma[1] !== mb[1] || ma[3] !== mb[3]) return null
+    changed = true
+    return `${ma[1]}${ma[2]}→${mb[2]}${ma[3]}`
+  })
+  return changed && merged.every(w => w !== null) ? merged.join(' ') : null
+}
+
+function cardLine(id: string, card: CardText): string {
+  const cost = card.isXCost ? 'X energy'
+    : card.cost === -1 ? 'unplayable'
+    : `${card.cost ?? '?'} energy`
+  const stars = card.starCost ? ` + ${card.starCost} stars` : ''
+  const meta = [cost + stars, card.type, card.rarity !== card.type ? card.rarity : null].filter(Boolean).join(', ')
+  const base = card.description ? stripMarkup(card.description) : ''
+  const upgradedText = card.upgradeDescription ? stripMarkup(card.upgradeDescription) : ''
+
+  let text = base || 'no text'
+  const notes: string[] = []
+  if (!card.upgrade) {
+    if (card.type !== 'Curse' && card.type !== 'Status') notes.push("can't upgrade")
+  } else {
+    const inline = upgradedText && upgradedText !== base ? inlineUpgrade(base, upgradedText) : null
+    if (inline) text = inline
+    else if (upgradedText && upgradedText !== base) notes.push(`upgraded: ${upgradedText}`)
+    // Cost and keyword changes never show up in the text, so describe them from the upgrade data.
+    const extra = Object.fromEntries(Object.entries(card.upgrade).filter(([k]) => k === 'cost' || k.startsWith('add_') || k.startsWith('remove_')))
+    if (!upgradedText || upgradedText === base) notes.push(`upgrade: ${describeUpgrade(card.upgrade)}`)
+    else if (Object.keys(extra).length) notes.push(`upgrade also: ${describeUpgrade(extra)}`)
+  }
+  return `- ${id} (${meta}): ${text}${notes.length ? ` [${notes.join('; ')}]` : ''}`
 }
 
 function allStats(run: Run): PlayerStat[] {
@@ -132,7 +240,7 @@ function floorLine(floor: MapPointHistory, floorNumber: number, actNumber: numbe
   return parts.join(' | ')
 }
 
-export function buildRunDigest(run: Run, relics: Map<string, RelicText> = new Map()): RunDigest {
+export function buildRunDigest(run: Run, { relics = new Map(), cards = new Map() }: DigestReference = {}): RunDigest {
   const player = run.players[0]
   if (!player) throw new Error('Run has no players')
 
@@ -221,6 +329,11 @@ export function buildRunDigest(run: Run, relics: Map<string, RelicText> = new Ma
     return `- ${info?.name ?? id} (floor ${r.floor_added_to_deck})${desc}`
   })
 
+  const cardLines = cardIds(run)
+    .filter(id => cards.has(id))
+    .sort()
+    .map(id => cardLine(id, cards.get(id)!))
+
   const outcome = run.win ? 'WON' : run.was_abandoned ? 'ABANDONED' : `DIED on floor ${floorNumber}${killedBy ? ` to ${killedBy}` : ''}`
 
   const text = [
@@ -243,6 +356,7 @@ export function buildRunDigest(run: Run, relics: Map<string, RelicText> = new Ma
     '',
     `Final potions: ${player.potions.map(p => stripId(p.id)).join(', ') || 'none'}`,
     '',
+    ...(cardLines.length ? [`Card reference (every card in the deck or offered this run; a→b = base→upgraded value):`, ...cardLines, ''] : []),
     'Floor by floor:',
     ...floorLines
   ].join('\n')

@@ -59,12 +59,19 @@ Server code gets bindings with `useCloudflareEnv(event)`; D1 queries use `useDat
   `SELECT prompt_version, COUNT(*), AVG(feedback) FROM run_analyses WHERE feedback IS NOT NULL GROUP BY 1`.
 - Iterate on prompts with `npm run digest` first; it runs the same pure modules the Worker uses.
 - Model output is untrusted: everything goes through `normalizeAnalysis` (clamps rating, validates floor numbers).
-- Card text is in D1 (`cards`) but not yet fed into the digest, so the model still only sees card names.
-  Wiring it in is the biggest known quality lever.
+- The digest includes a card reference: text for every card in the deck or offered during the run (from D1 `cards`;
+  `npm run digest` reads `data/cards.json` + `seed.sql` instead, so local output matches production). Upgrades that only
+  change numbers are written inline as `Deal 6→8 damage`. D1 lookups are chunked (100 bound-parameter limit).
+- Switch models by changing `AI_MODEL` in `wrangler.jsonc` (then `npm run cf-typegen`). `buildModelRequest` /
+  `parseModelOutput` handle both Workers AI shapes: Workers-native (`{ response }`, listed in `WORKERS_NATIVE_MODELS`)
+  and OpenAI Chat Completions (`choices[0].message.content`, everything else). The model must support JSON schema output.
 
 ## Working agreement
 
 - Verify against the sample runs before calling something done: `npm run build`, typecheck, `npm run digest`.
+- After a build, run `npx nuxi prepare` before typechecking, or new server utils show up as "Cannot find name".
+- End-to-end without Cloudflare credentials: run the built Worker with `wrangler dev` and bind `AI` to a local mock
+  Worker (a `WorkerEntrypoint` with a `run()` method) through a service binding. That exercises D1, KV, R2 and feedback.
 - UI changes: check desktop and ~390px mobile widths; match the gold (`#fec000`) heading style and Kreon font.
 - Keep `worker-configuration.d.ts` generated (`npm run cf-typegen`), never hand-edited.
 - Roadmap context: career analytics will come from the game's progress save file (not in the repo yet). The AI coach
