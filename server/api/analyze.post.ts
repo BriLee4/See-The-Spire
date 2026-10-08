@@ -74,6 +74,10 @@ export default defineEventHandler(async (event): Promise<AnalyzeResponse> => {
     throw createError({ statusCode: 502, statusMessage: 'The AI coach returned an unreadable answer. Please try again.' })
   }
 
+  // Partial answers still render, but log them so prompt/model problems show up in Workers Logs.
+  const empty = (['strengths', 'mistakes', 'keyMoments', 'tips'] as const).filter(k => !analysis[k].length)
+  if (empty.length) console.warn('AI analysis missing sections', { model, promptVersion: PROMPT_VERSION, empty })
+
   const response: CachedAnalysis = { key, model, promptVersion: PROMPT_VERSION, facts, analysis }
   // Only set when the call went through AI Gateway; D1 rejects anything but a string or null.
   const gatewayLogId = typeof env.AI.aiGatewayLogId === 'string' ? env.AI.aiGatewayLogId : null

@@ -10,6 +10,7 @@
     "postinstall": "nuxt prepare",
     "deploy": "npm run build && wrangler deploy",
     "cf-typegen": "wrangler types",
+    "test": "node --test --experimental-strip-types --no-warnings \"tests/**/*.test.ts\"",
     "digest": "node --experimental-strip-types --no-warnings scripts/preview-digest.ts",
     "db:migrate": "wrangler d1 migrations apply see-the-spire-db --remote",
     "cards:sql": "node --experimental-strip-types --no-warnings scripts/build-cards-sql.ts",

@@ -76,7 +76,7 @@ const sections = computed<{ title: string; tone: string; points: CoachPoint[] }[
     { title: 'What went well', tone: 'good', points: a.strengths },
     { title: 'What cost you', tone: 'bad', points: a.mistakes },
     { title: 'Tips for next run', tone: 'tip', points: a.tips }
-  ]
+  ].filter(section => section.points.length)
 })
 </script>
 
@@ -135,15 +135,15 @@ const sections = computed<{ title: string; tone: string; points: CoachPoint[] }[
             </div>
           </div>
 
-          <div class="point-columns">
+          <div v-if="sections.length" class="point-columns" :style="{ '--columns': sections.length }">
             <div v-for="section in sections" :key="section.title" class="coach-panel" :class="`tone-${section.tone}`">
               <h2 class="section-label">{{ section.title }}</h2>
               <ul class="points">
                 <li v-for="(point, i) in section.points" :key="i">
-                  <p class="point-title">
+                  <p v-if="point.title || point.floor" class="point-title">
                     <span v-if="point.floor" class="floor-chip">F{{ point.floor }}</span>{{ point.title }}
                   </p>
-                  <p class="point-detail">{{ point.detail }}</p>
+                  <p v-if="point.detail" class="point-detail">{{ point.detail }}</p>
                 </li>
               </ul>
             </div>
@@ -155,8 +155,8 @@ const sections = computed<{ title: string; tone: string; points: CoachPoint[] }[
               <li v-for="(moment, i) in analysis.keyMoments" :key="i">
                 <span class="floor-chip">{{ moment.floor ? `F${moment.floor}` : '•' }}</span>
                 <div>
-                  <p class="point-title">{{ moment.title }}</p>
-                  <p class="point-detail">{{ moment.detail }}</p>
+                  <p v-if="moment.title" class="point-title">{{ moment.title }}</p>
+                  <p v-if="moment.detail" class="point-detail">{{ moment.detail }}</p>
                 </div>
               </li>
             </ol>
@@ -166,7 +166,9 @@ const sections = computed<{ title: string; tone: string; points: CoachPoint[] }[
             <span>Was this useful?</span>
             <UButton
               icon="i-heroicons-hand-thumb-up"
-              :variant="feedback === 'up' ? 'solid' : 'ghost'"
+              variant="ghost"
+              class="feedback-button"
+              :class="{ selected: feedback === 'up' }"
               color="neutral"
               :disabled="!!feedback"
               @click="sendFeedback(true)"
@@ -175,7 +177,9 @@ const sections = computed<{ title: string; tone: string; points: CoachPoint[] }[
             </UButton>
             <UButton
               icon="i-heroicons-hand-thumb-down"
-              :variant="feedback === 'down' ? 'solid' : 'ghost'"
+              variant="ghost"
+              class="feedback-button"
+              :class="{ selected: feedback === 'down' }"
               color="neutral"
               :disabled="!!feedback"
               @click="sendFeedback(false)"
@@ -296,7 +300,7 @@ const sections = computed<{ title: string; tone: string; points: CoachPoint[] }[
 .verdict { font-size: 2rem; font-weight: 700; margin-bottom: 0.5rem; }
 .summary { line-height: 1.5; }
 
-.point-columns { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; }
+.point-columns { display: grid; grid-template-columns: repeat(var(--columns, 3), 1fr); gap: 1.5rem; }
 .tone-good { border-color: rgba(74, 222, 128, 0.45); }
 .tone-bad { border-color: rgba(248, 113, 113, 0.45); }
 .tone-tip { border-color: rgba(96, 165, 250, 0.45); }
@@ -320,6 +324,14 @@ const sections = computed<{ title: string; tone: string; points: CoachPoint[] }[
 .timeline li { display: flex; gap: 0.5rem; align-items: flex-start; }
 
 .feedback-panel { display: flex; align-items: center; gap: 0.75rem; flex-wrap: wrap; padding: 1rem 1.5rem; }
+.feedback-button {
+  color: white;
+  font-size: 1.1rem;
+  padding-inline: 1rem;
+  border: 1px solid rgba(255, 255, 255, 0.6);
+}
+.feedback-button:hover:not(:disabled) { background: rgba(255, 255, 255, 0.12); }
+.feedback-button.selected { background: #fec000; border-color: #fec000; color: black; opacity: 1; }
 .model-note { margin-left: auto; font-size: 1rem; opacity: 0.6; }
 
 @media (max-width: 1100px) {

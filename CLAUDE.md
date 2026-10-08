@@ -14,6 +14,7 @@ Cloudflare Worker (Nitro `cloudflare_module` preset). Live at https://www.seethe
 | Regenerate binding types after editing `wrangler.jsonc` | `npm run cf-typegen` |
 | Apply D1 migrations (remote) | `npm run db:migrate` |
 | Load/refresh card data in remote D1 from `data/cards.json` | `npm run db:seed:cards` |
+| Unit tests (model-output normalisation; add a case for every bad output seen in prod) | `npm test` |
 | Print the exact AI prompt for a run (no deploy, no AI call) | `npm run digest -- public/data/1788790424.run --prompt` |
 | Typecheck | `npx -p typescript@5 -p vue-tsc@2 vue-tsc --noEmit -p .nuxt/tsconfig.server.json` (and `tsconfig.app.json`) |
 
@@ -58,7 +59,13 @@ Server code gets bindings with `useCloudflareEnv(event)`; D1 queries use `useDat
   feedback in D1 / AI Gateway is grouped by it, which is how we tell whether a change helped:
   `SELECT prompt_version, COUNT(*), AVG(feedback) FROM run_analyses WHERE feedback IS NOT NULL GROUP BY 1`.
 - Iterate on prompts with `npm run digest` first; it runs the same pure modules the Worker uses.
-- Model output is untrusted: everything goes through `normalizeAnalysis` (clamps rating, validates floor numbers).
+- Model output is untrusted: everything goes through `normalizeAnalysis`. It accepts points as plain strings, common
+  alternative keys (`description`, `tip`, ...) and object maps; cuts long text at sentence/word boundaries (a paragraph
+  verdict becomes its first sentence); pulls floor numbers out of text; and throws when there are no coaching points,
+  so an unusable answer is never cached. Llama 3.3 returned string points in production (`coach-v2`), which used to
+  blank every section. Every new bad shape gets a case in `tests/coachPrompt.test.ts`.
+- Partial answers log `AI analysis missing sections` (Workers Logs). The raw model output is in the AI Gateway logs.
+- Cached answers stay broken until `PROMPT_VERSION` changes, so bump it with any fix that changes what gets stored.
 - The digest includes a card reference: text for every card in the deck or offered during the run (from D1 `cards`;
   `npm run digest` reads `data/cards.json` + `seed.sql` instead, so local output matches production). Upgrades that only
   change numbers are written inline as `Deal 6→8 damage`. D1 lookups are chunked (100 bound-parameter limit).
@@ -68,11 +75,15 @@ Server code gets bindings with `useCloudflareEnv(event)`; D1 queries use `useDat
 
 ## Working agreement
 
-- Verify against the sample runs before calling something done: `npm run build`, typecheck, `npm run digest`.
+- Verify against the sample runs before calling something done: `npm run build`, typecheck, `npm test`, `npm run digest`.
 - After a build, run `npx nuxi prepare` before typechecking, or new server utils show up as "Cannot find name".
 - End-to-end without Cloudflare credentials: run the built Worker with `wrangler dev` and bind `AI` to a local mock
   Worker (a `WorkerEntrypoint` with a `run()` method) through a service binding. That exercises D1, KV, R2 and feedback.
 - UI changes: check desktop and ~390px mobile widths; match the gold (`#fec000`) heading style and Kreon font.
+  Nuxt UI `neutral` button variants paint light backgrounds (the app runs in light mode), so white text on them
+  disappears; style buttons on dark panels explicitly.
+- Stopping a local `wrangler dev`: kill by process name (`workerd`, node running `wrangler-dist`), never
+  `pkill -f wrangler` from a shell whose own command line contains "wrangler": it kills the shell.
 - Keep `worker-configuration.d.ts` generated (`npm run cf-typegen`), never hand-edited.
 - Roadmap context: career analytics will come from the game's progress save file (not in the repo yet). The AI coach
   is per-run today; career-level coaching should reuse `run_analyses` + the R2 archive.
