@@ -27,3 +27,6 @@ logs
 .wrangler
 .dev.vars*
 !.dev.vars.example
+
+# Generated from data/cards.json by npm run cards:sql
+db/cards.sql

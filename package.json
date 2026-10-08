@@ -11,7 +11,9 @@
     "deploy": "npm run build && wrangler deploy",
     "cf-typegen": "wrangler types",
     "digest": "node --experimental-strip-types --no-warnings scripts/preview-digest.ts",
-    "db:migrate": "wrangler d1 migrations apply see-the-spire-db --remote"
+    "db:migrate": "wrangler d1 migrations apply see-the-spire-db --remote",
+    "cards:sql": "node --experimental-strip-types --no-warnings scripts/build-cards-sql.ts",
+    "db:seed:cards": "npm run cards:sql && wrangler d1 execute see-the-spire-db --remote --file db/cards.sql"
   },
   "dependencies": {
     "@nuxt/ui": "^4.11.1",

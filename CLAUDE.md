@@ -13,6 +13,7 @@ Cloudflare Worker (Nitro `cloudflare_module` preset). Live at https://www.seethe
 | Deploy | `npm run deploy` |
 | Regenerate binding types after editing `wrangler.jsonc` | `npm run cf-typegen` |
 | Apply D1 migrations (remote) | `npm run db:migrate` |
+| Load/refresh card data in remote D1 from `data/cards.json` | `npm run db:seed:cards` |
 | Print the exact AI prompt for a run (no deploy, no AI call) | `npm run digest -- public/data/1788790424.run --prompt` |
 | Typecheck | `npx -p typescript@5 -p vue-tsc@2 vue-tsc --noEmit -p .nuxt/tsconfig.server.json` (and `tsconfig.app.json`) |
 
@@ -29,6 +30,9 @@ Cloudflare Worker (Nitro `cloudflare_module` preset). Live at https://www.seethe
 - `server/utils/runDigest.ts` — run file -> computed `RunFacts` + compact text digest for the model.
 - `server/utils/coachPrompt.ts` — system prompt, JSON schema, `PROMPT_VERSION`, output normaliser.
 - `migrations/` — D1 migrations (`wrangler d1 migrations`). `seed.sql` is the original relics/potions dump.
+- `data/cards.json` — source card data (577 cards). `scripts/build-cards-sql.ts` turns it into `db/cards.sql`
+  (generated, gitignored) with image links rewritten to our CDN: `cards/<id>.png` and `cards/<id>_plus.png`
+  (`image_url_upgraded` is NULL for cards that can't upgrade). After a game patch: replace the JSON, rerun the seed.
 - `public/data/*.run` — sample runs (one 48-floor Ironclad win, one 8-floor Defect loss). Use them for every check.
 
 ## Cloudflare bindings (`wrangler.jsonc`)
@@ -36,7 +40,7 @@ Cloudflare Worker (Nitro `cloudflare_module` preset). Live at https://www.seethe
 | Binding | Product | Used for |
 | --- | --- | --- |
 | `AI` | Workers AI (via AI Gateway `AI_GATEWAY_ID`) | Run analysis; gateway logs + feedback scores |
-| `DB` | D1 | `relics`, `potions`, `run_analyses` |
+| `DB` | D1 | `relics`, `potions`, `cards`, `run_analyses` |
 | `ANALYSIS_CACHE` | KV | Finished analyses, 30-day TTL |
 | `RUN_ARCHIVE` | R2 | Uploaded runs at `runs/<sha256(digest)>.run`, for replaying prompt changes |
 | `ANALYTICS` | Analytics Engine | Coach events; column meanings documented in `server/utils/cloudflare.ts` |
@@ -55,8 +59,8 @@ Server code gets bindings with `useCloudflareEnv(event)`; D1 queries use `useDat
   `SELECT prompt_version, COUNT(*), AVG(feedback) FROM run_analyses WHERE feedback IS NOT NULL GROUP BY 1`.
 - Iterate on prompts with `npm run digest` first; it runs the same pure modules the Worker uses.
 - Model output is untrusted: everything goes through `normalizeAnalysis` (clamps rating, validates floor numbers).
-- Card effects are not in D1 yet, so the model only knows card names. Adding a `cards` table and feeding
-  descriptions into the digest is the biggest known quality lever.
+- Card text is in D1 (`cards`) but not yet fed into the digest, so the model still only sees card names.
+  Wiring it in is the biggest known quality lever.
 
 ## Working agreement
 
