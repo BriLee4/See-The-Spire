@@ -69,6 +69,8 @@ Server code gets bindings with `useCloudflareEnv(event)`; D1 queries use `useDat
 - The digest includes a card reference: text for every card in the deck or offered during the run (from D1 `cards`;
   `npm run digest` reads `data/cards.json` + `seed.sql` instead, so local output matches production). Upgrades that only
   change numbers are written inline as `Deal 6→8 damage`. D1 lookups are chunked (100 bound-parameter limit).
+- Current model: `@cf/openai/gpt-oss-120b` (reasoning model, Chat Completions format, strict JSON schema, 8k
+  `max_tokens` to cover reasoning + answer). It replaced Llama 3.3 70B, which drifted from the schema.
 - Switch models by changing `AI_MODEL` in `wrangler.jsonc` (then `npm run cf-typegen`). `buildModelRequest` /
   `parseModelOutput` handle both Workers AI shapes: Workers-native (`{ response }`, listed in `WORKERS_NATIVE_MODELS`)
   and OpenAI Chat Completions (`choices[0].message.content`, everything else). The model must support JSON schema output.

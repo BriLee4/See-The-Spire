@@ -11,7 +11,7 @@
   },
   "vars": {
     // Workers AI model used by /api/analyze. Must support JSON mode (response_format).
-    "AI_MODEL": "@cf/meta/llama-3.3-70b-instruct-fp8-fast",
+    "AI_MODEL": "@cf/openai/gpt-oss-120b",
     // AI Gateway that every Workers AI call is routed through (logs, caching, feedback, spend limits).
     "AI_GATEWAY_ID": "see-the-spire"
   },
