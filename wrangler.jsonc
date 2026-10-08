@@ -9,12 +9,54 @@
       "enabled": true
     }
   },
+  "vars": {
+    // Workers AI model used by /api/analyze. Must support JSON mode (response_format).
+    "AI_MODEL": "@cf/meta/llama-3.3-70b-instruct-fp8-fast",
+    // AI Gateway that every Workers AI call is routed through (logs, caching, feedback, spend limits).
+    "AI_GATEWAY_ID": "see-the-spire"
+  },
+  "ai": {
+    "binding": "AI"
+  },
    "d1_databases": [
     {
       "binding": "DB",
       "database_name": "see-the-spire-db",
       "database_id": "11ee83c1-fcf7-49be-bf9b-6c0c19e969cd",
+      "migrations_dir": "migrations",
        "remote": true
+    }
+  ],
+  // Cache of finished AI analyses, keyed by run + prompt version + model.
+  // No id: wrangler provisions the namespace on first deploy and writes the id back here.
+  "kv_namespaces": [
+    {
+      "binding": "ANALYSIS_CACHE"
+    }
+  ],
+  // Archive of uploaded .run files, used to replay prompt changes against real runs.
+  "r2_buckets": [
+    {
+      "binding": "RUN_ARCHIVE",
+      "bucket_name": "see-the-spire-runs"
+    }
+  ],
+  // Usage + latency events for the AI coach. Dataset is created on first write.
+  "analytics_engine_datasets": [
+    {
+      "binding": "ANALYTICS",
+      "dataset": "see_the_spire_events"
+    }
+  ],
+  // Per-IP limit on uncached AI analyses so the Workers AI bill can't run away.
+  "ratelimits": [
+    {
+      "name": "AI_RATE_LIMITER",
+      "namespace_id": "1001",
+      "simple": {
+        "limit": 5,
+        "period": 60
+      }
     }
   ],
      "previews": {

@@ -46,7 +46,13 @@ const backgroundClass = computed(() => {
         >
           Back
         </UButton>
-
+        <UButton
+          icon="i-heroicons-sparkles"
+          color="secondary"
+          to="/analysis"
+        >
+          AI Coach
+        </UButton>
       </div>
        <section class="stats-column">
      <StatCard
@@ -136,6 +142,7 @@ const backgroundClass = computed(() => {
 .back-button-container {
   display: flex;
   justify-content: flex-start;
+  gap: .75rem;
   margin-bottom: 1rem;
 }
 .highlight{
