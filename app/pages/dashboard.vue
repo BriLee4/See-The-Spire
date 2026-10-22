@@ -137,6 +137,32 @@ const backgroundClass = computed(() => {
   display: flex;
   justify-content: flex-start;
   margin-bottom: 1rem;
+  
+}
+.back-button{
+  background-image: url("/imgs/back_button.webp");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 100% 100%; 
+  width: 120px;               
+  height: 60px;              
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  box-shadow: none;
+  background-color: transparent !important; 
+  font-size: 1rem;
+  padding-right: 40px;
+  padding-bottom: 10px;
+   transition: transform 0.1s ease, filter 0.1s ease;
+}
+
+.back-button:hover {
+  transform: scale(1.08);
+  background-color: transparent !important;
+  
+  filter: drop-shadow(0 0 6px #facc15) brightness(1.1); 
 }
 .highlight{
   color: #fec000;  -webkit-text-stroke: .5px black;

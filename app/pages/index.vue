@@ -74,9 +74,13 @@ const exampleFileUpload = async () => {
   }"
       />
       <section class = 'file-button'>
-       <UButton size="lg" color="secondary" @click="exampleFileUpload">Example Run</UButton>
+       <UButton class = 'example-button' 
+       variant="ghost" 
+       color="neutral" 
+       @click="exampleFileUpload">Example Run
+      </UButton>
           </section>
-           <div v-if="files?.size || errorMessage" class="file-loader-overlay">
+           <div v-if="errorMessage" class="file-loader-overlay">
              <p v-if="errorMessage" class="text-red-400">{{ errorMessage }}</p>
 
       <UButton type="reset" @click="resetFileUpload">Reset</UButton>
@@ -133,7 +137,28 @@ const exampleFileUpload = async () => {
   z-index: 10;
   
 }
-
+.example-button{
+  background-image: url("/imgs/event_button.webp");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 100% 100%; 
+  width: 200px;               
+  height: 60px;              
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  box-shadow: none;
+  background-color: transparent !important; 
+  font-size: 1rem;
+     transition: transform 0.1s ease, filter 0.1s ease;
+}
+.example-button:hover {
+  transform: scale(1.08);
+  background-color: transparent !important;
+  
+  filter: drop-shadow(0 0 6px #facc15) brightness(1.1); 
+}
 .loader-header {
   text-align: center;
   padding: 2rem 1rem;
