@@ -75,7 +75,7 @@ const backgroundClass = computed(() => {
       <RelicCard :relics="player?.relics ?? []" :deck="player?.deck ?? []" />
     </section>
   </main>
-   <UFooter>
+   <UFooter class="mt-auto">
       <template #default>
         <div class="flex justify-center items-center">
           <UButton 
