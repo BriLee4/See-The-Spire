@@ -49,19 +49,20 @@ const exampleFileUpload = async () => {
 
 <template>
   <main class="main-page">
+  <section class="file-loader">
     <header class="loader-header">
         <h1>See<span class="highlight">The</span>Spire</h1>
-      <p>Upload your Slay the Spire run and see your recent run</p>
+       <p class="subtitle">Upload your Slay the Spire run and see your recent run</p>
       </header>
 
-    <section class="file-loader">
+      <div class="upload-container">
       <UFileUpload 
       v-model="files"
       color="neutral"
       highlight
       label="Drop your .run file here"
       description=".run files are located in your Slay the Spire save folder"
-      class="w-100 h-135 -translate-x-1 translate-y-12"
+      class="w-100 h-160 -translate-x-1"
       accept= ".run"
       size=''
       :file-delete="false"
@@ -73,6 +74,8 @@ const exampleFileUpload = async () => {
     label:'text-white'
   }"
       />
+      </div>
+
       <section class = 'file-button'>
        <UButton class = 'example-button' 
        variant="ghost" 
@@ -86,8 +89,7 @@ const exampleFileUpload = async () => {
       <UButton type="reset" @click="resetFileUpload">Reset</UButton>
     </div>
     </section>
-  </main>
-    <UFooter>
+    <UFooter class="mt-auto">
       <template #default>
         <div class="flex justify-center items-center">
           <UButton 
@@ -103,18 +105,28 @@ const exampleFileUpload = async () => {
         </div>
       </template>
     </UFooter>
+    </main>
 </template>
 <style scoped>
 .main-page{
- font-size: 1.5rem; 
-  min-height: 95vh; 
+  font-size: 1.5rem;
+  min-height: 100vh;
+  background-image: url("/imgs/the_architect_event_encounter.webp");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+  background-attachment: fixed;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 .file-loader { 
   position: relative;
-  margin-inline: auto;   
+  margin-inline: auto;  
+  margin-top: 6rem; 
   justify-content: center;
   border-radius: 1.25rem; 
-  background-image:url("/imgs/submenu_panel_short.png") ; 
+  background-image:url("/imgs/submenu_panel.png") ; 
   background-repeat: no-repeat;
   background-repeat: no-repeat; 
   background-position: center;
@@ -122,10 +134,32 @@ const exampleFileUpload = async () => {
   color: white; 
   display: grid;
   place-items: center;  
-  width: 30rem; 
-  height: 45rem; 
-  padding-top: 3.1px;
+  width: 60rem; 
+  height: 60rem; 
+    padding: 3rem 2rem;
     font-size: 1.5rem;
+}
+.loader-header {
+  text-align: center;
+  margin-bottom: auto;
+}
+.loader-header h1 {
+  font-size: 2.25rem;
+  margin: 0 0 0.5rem 0;
+}
+
+.subtitle {
+  font-size: 0.95rem;
+
+  line-height: 1.3;
+}
+
+.upload-container {
+  width: 100%;
+  flex-grow: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .file-loader-overlay {
@@ -159,17 +193,13 @@ const exampleFileUpload = async () => {
   
   filter: drop-shadow(0 0 6px #facc15) brightness(1.1); 
 }
-.loader-header {
-  text-align: center;
-  padding: 2rem 1rem;
-}
-.file-button{
-   position: relative;
-  top: 50px;
+.file-button {
+  margin-top: auto;
+  padding-bottom: 2.5rem;
 }
 
 .highlight{
-  color: #fec000;  -webkit-text-stroke: .5px black;
+  color: #fec000;
 }
 
 .map-row {
